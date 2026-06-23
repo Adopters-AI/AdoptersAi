@@ -1,0 +1,556 @@
+"use client";
+
+import { useState } from "react";
+import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
+import { Container, Label } from "@/components/ui";
+import watermarkLogo from "@/assets/watermark.png.png";
+
+const steps = [
+  {
+    number: "QUESTION 1",
+    title: "What industry are you in?",
+    subtitle: "This helps map the recommendation to a relevant use-case pattern.",
+    options: [
+      { id: "finance", title: "Finance / Legal / Compliance", body: "Risk, compliance, regulatory, contracts, fraud." },
+      { id: "healthcare", title: "Healthcare / Public", body: "Service delivery, triage, document intelligence." },
+      { id: "retail", title: "Retail / Consumer", body: "Demand, pricing, customer engagement." },
+      { id: "manufacturing", title: "Manufacturing / Industrial", body: "Copilots, AIops, knowledge search." },
+    ],
+  },
+  {
+    number: "QUESTION 2",
+    title: "What is your main AI challenge?",
+    subtitle: "Choose the issue that best describes your current situation.",
+    options: [
+      { id: "roadmap", title: "We need a roadmap", body: "We know AI matters but need clarity and prioritization." },
+      { id: "data", title: "Our data is scattered", body: "We need one intelligence layer across many sources." },
+      { id: "build", title: "We need to build", body: "We have a use case and need implementation support." },
+      { id: "monitoring", title: "We need monitoring", body: "AI is live or close to launch and needs operations." },
+    ],
+  },
+  {
+    number: "QUESTION 3",
+    title: "Where are you in your AI journey?",
+    subtitle: "This helps decide whether to start with strategy, build, or operations.",
+    options: [
+      { id: "exploring", title: "Just exploring", body: "We know AI matters but haven't started yet. We need a strategy and a roadmap before anything else." },
+      { id: "plan", title: "Have a plan, need to build", body: "Leadership has committed. We have use cases in mind and need engineers and architects to execute." },
+      { id: "implementing", title: "Mid-implementation", body: "Team is preparing to build or integrate a system." },
+      { id: "scaling", title: "Running AI, want to scale", body: "AI is live and needs monitoring, governance, and improvement." },
+    ],
+  },
+  {
+    number: "QUESTION 4",
+    title: "What organization size best fits you?",
+    subtitle: "The recommended delivery model changes by team size and complexity.",
+    options: [
+      { id: "small", title: "Small team", body: "Lean team looking for focused guidance or a practical pilot." },
+      { id: "midsize", title: "Mid-size organization", body: "Multiple teams, systems, and stakeholders involved." },
+      { id: "enterprise", title: "Enterprise", body: "Complex systems, compliance needs, and cross-functional teams." },
+      { id: "regulated", title: "Regulated enterprise", body: "High governance, security, audit, or sovereign deployment needs." },
+    ],
+  },
+];
+
+// ─── Result definitions derived from actual website content ───────────────────
+
+type ResultKey = "strategy" | "build" | "operate" | "intelligent";
+
+const results: Record<
+  ResultKey,
+  {
+    label: string;
+    title: string;
+    tagline: string;
+    body: string;
+    readinessPct: number;
+    nextSteps: string[];
+    primaryCTA: { label: string; href: string };
+    secondaryCTA: { label: string; href: string };
+  }
+> = {
+  strategy: {
+    label: "01 · AI Strategy & Roadmap",
+    title: "AI Strategy & Roadmap",
+    tagline: "Plan before you build.",
+    body: "Based on your answers, you need clarity and direction before committing to implementation. An AI Strategy engagement defines what to build, in what order, and with what governance — so every investment is correctly sequenced.",
+    readinessPct: 42,
+    nextSteps: [
+      "AI Readiness Assessment (2–4 weeks) — diagnostic across data, infrastructure, talent, and governance to identify high-value AI opportunities and blockers.",
+      "AI Investment Roadmap (4–6 weeks) — prioritized 18–36 month roadmap with business cases, dependencies, and ROI logic. Board-ready.",
+      "AI Center of Excellence Design — operating model, team structure, tooling, and capability ladder to scale internal AI adoption.",
+    ],
+    primaryCTA: { label: "Explore AI Strategy →", href: "/services" },
+    secondaryCTA: { label: "Book a strategy call", href: "/contact" },
+  },
+  build: {
+    label: "02 · AI Professional Services",
+    title: "AI Professional Services",
+    tagline: "Build, integrate, deploy.",
+    body: "Your answers show you have direction and are ready to execute. Adopters delivers pilots, system integrations, data platforms, and production AI engineering — moving your use cases from plan into production.",
+    readinessPct: 71,
+    nextSteps: [
+      "PoC & Pilot Delivery (8–12 weeks) — structured program from problem definition to a validated working pilot running on real data.",
+      "AI Systems Integration (3–6 months) — full-scale AI deployment integrated with enterprise systems, workflows, and existing platforms.",
+      "MLOps & AI Engineering (2–4 months) — model versioning, automated retraining pipelines, drift monitoring, and deployment workflows.",
+    ],
+    primaryCTA: { label: "Explore Professional Services →", href: "/services" },
+    secondaryCTA: { label: "Book a build consultation", href: "/contact" },
+  },
+  operate: {
+    label: "03 · AI Managed Services",
+    title: "AI Managed Services",
+    tagline: "Keep it running. Keep it improving.",
+    body: "AI is already live or close to launch in your organization. Adopters Managed Services keeps your models monitored, retrained, compliant, and continuously improving — with SLA-backed operations and a dedicated AI support pod.",
+    readinessPct: 88,
+    nextSteps: [
+      "AI Operations & Monitoring — model health monitoring, drift detection, performance alerts, and incident response for live systems.",
+      "Continuous Retraining — scheduled retraining cycles, evaluation, controlled rollouts, and rollback safety nets as data changes.",
+      "Dedicated AI Support Pod — flexible team of AI, data, and platform specialists working alongside your internal team on an ongoing basis.",
+    ],
+    primaryCTA: { label: "Explore Managed Services →", href: "/services" },
+    secondaryCTA: { label: "Book an operations review", href: "/contact" },
+  },
+  intelligent: {
+    label: "Product · Adopters Intelligent",
+    title: "Adopters Intelligent",
+    tagline: "One intelligence layer across all your data.",
+    body: "Your profile points to a need for an institutional intelligence platform. Adopters Intelligent turns scattered information from documents, APIs, and feeds into decision-ready intelligence — delivered under your brand with full data sovereignty across the Levant and GCC.",
+    readinessPct: 58,
+    nextSteps: [
+      "Request a product walkthrough to see GraphRAG intelligence working across Arabic and English institutional data sources.",
+      "Discuss white-label deployment options — cloud, sovereign, or hybrid — for your institution or partner network.",
+      "Pair with an AI Strategy engagement to build the governance and adoption roadmap alongside the platform rollout.",
+    ],
+    primaryCTA: { label: "Explore Adopters Intelligent →", href: "/products" },
+    secondaryCTA: { label: "Request a demo", href: "/contact" },
+  },
+};
+
+// ─── Answer context labels ────────────────────────────────────────────────────
+
+const industryLabel: Record<string, string> = {
+  finance: "Finance / Legal / Compliance",
+  healthcare: "Healthcare / Public Sector",
+  retail: "Retail & Consumer",
+  manufacturing: "Manufacturing & Industrial",
+};
+
+const challengeLabel: Record<string, string> = {
+  roadmap: "needs a clear AI roadmap and prioritization",
+  data: "needs one intelligence layer across scattered data",
+  build: "ready to implement — needs build support",
+  monitoring: "AI is live and needs operations and monitoring",
+};
+
+const journeyLabel: Record<string, string> = {
+  exploring: "just getting started with AI",
+  plan: "has a plan — ready to build",
+  implementing: "currently mid-implementation",
+  scaling: "running AI, scaling operations",
+};
+
+const sizeLabel: Record<string, string> = {
+  small: "small team",
+  midsize: "mid-size organization",
+  enterprise: "enterprise",
+  regulated: "regulated enterprise",
+};
+
+// ─── Scoring ──────────────────────────────────────────────────────────────────
+
+type Answers = Record<number, string>;
+type Result = (typeof results)[ResultKey];
+
+function scoreAnswers(answers: Answers): Result {
+  const score: Record<ResultKey, number> = { strategy: 0, build: 0, operate: 0, intelligent: 0 };
+
+  // Q1: industry — finance and healthcare are institutional data-heavy → Intelligent boost
+  const industry = answers[0];
+  if (industry === "finance" || industry === "healthcare") score.intelligent += 2;
+  if (industry === "retail" || industry === "manufacturing") score.build += 1;
+
+  // Q2: challenge — strongest signal
+  const challenge = answers[1];
+  if (challenge === "roadmap") score.strategy += 3;
+  if (challenge === "data") score.intelligent += 3;
+  if (challenge === "build") score.build += 3;
+  if (challenge === "monitoring") score.operate += 3;
+
+  // Q3: journey — second strongest signal
+  const journey = answers[2];
+  if (journey === "exploring") score.strategy += 3;
+  if (journey === "plan") score.build += 2;
+  if (journey === "implementing") score.build += 3;
+  if (journey === "scaling") score.operate += 3;
+
+  // Q4: size — tiebreaker modifier
+  const size = answers[3];
+  if (size === "small") score.strategy += 1;
+  if (size === "midsize") score.build += 1;
+  if (size === "enterprise") score.operate += 1;
+  if (size === "regulated") { score.strategy += 1; score.operate += 1; }
+
+  const winner = (Object.entries(score) as [ResultKey, number][]).reduce(
+    (best, [key, val]) => (val > best[1] ? [key, val] : best),
+    ["strategy", -1] as [ResultKey, number]
+  );
+
+  return results[winner[0]];
+}
+
+// ─── Components ───────────────────────────────────────────────────────────────
+
+function DonutChart({ pct }: { pct: number }) {
+  const r = 58;
+  const circ = 2 * Math.PI * r;
+  const offset = circ * (1 - pct / 100);
+
+  return (
+    <div className="relative flex h-[156px] w-[156px] shrink-0 items-center justify-center">
+      <svg className="absolute inset-0 -rotate-90" height="156" viewBox="0 0 156 156" width="156">
+        <circle cx="78" cy="78" fill="none" r={r} stroke="#1B3B31" strokeWidth="16" />
+        <circle
+          cx="78"
+          cy="78"
+          fill="none"
+          r={r}
+          stroke="#68DB7D"
+          strokeDasharray={circ}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          strokeWidth="16"
+        />
+      </svg>
+      <div className="relative text-center">
+        <p className="text-[28px] font-black leading-none" style={{ color: "#F3F5F4" }}>
+          {pct}%
+        </p>
+        <p className="mt-1.5 text-[9px] font-black uppercase tracking-[0.13em]" style={{ color: "#889B94" }}>
+          AI Readiness
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function AssessmentHero() {
+  return (
+    <section className="hero-grid relative overflow-hidden py-16 md:py-[68px]" style={{ backgroundColor: "#071F19" }}>
+      <img
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 top-0 w-[52%] max-w-[800px] select-none opacity-[0.38]"
+        src={watermarkLogo.src}
+      />
+      <Container className="relative z-10">
+        <Label dark>AI Assessment</Label>
+        <h1 className="mt-6 max-w-[680px] text-[40px] font-black leading-[1.05] md:text-[60px]" style={{ color: "#F3F5F4" }}>
+          Find your best AI path in{" "}
+          <em className="not-italic" style={{ color: "#68DB7D" }}>60 seconds.</em>
+        </h1>
+        <p className="mt-5 max-w-[520px] text-base leading-7" style={{ color: "#C7D0CB" }}>
+          Answer four quick questions and get a recommended starting point: Strategy, Build,
+          Operate, or Adopters Intelligent.
+        </p>
+      </Container>
+    </section>
+  );
+}
+
+function OptionCard({
+  option,
+  selected,
+  onSelect,
+}: {
+  option: { id: string; title: string; body: string };
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      className="rounded-2xl border p-5 text-left transition-all duration-150"
+      onClick={onSelect}
+      style={{
+        backgroundColor: selected ? "#1C533F" : "#102B24",
+        borderColor: selected ? "#68DB7D" : "#1B3B31",
+        color: "#F3F5F4",
+      }}
+      type="button"
+    >
+      <p className="text-[15px] font-black" style={{ color: "#F3F5F4" }}>
+        {option.title}
+      </p>
+      <p className="mt-1.5 text-[13px] leading-5" style={{ color: "#C7D0CB" }}>
+        {option.body}
+      </p>
+    </button>
+  );
+}
+
+function ResultPanel({
+  result,
+  answers,
+  onReset,
+}: {
+  result: Result;
+  answers: Answers;
+  onReset: () => void;
+}) {
+  const industry = industryLabel[answers[0]] ?? "your industry";
+  const challenge = challengeLabel[answers[1]] ?? "your challenge";
+  const journey = journeyLabel[answers[2]] ?? "your journey stage";
+  const size = sizeLabel[answers[3]] ?? "your organization";
+
+  return (
+    <section className="pb-24 pt-10 md:pb-[92px]" style={{ backgroundColor: "#0C241D" }}>
+      <Container>
+        <div className="mx-auto max-w-[752px]">
+          {/* Progress: all complete */}
+          <div className="flex gap-2">
+            {steps.map((_, i) => (
+              <div key={i} className="h-[3px] flex-1 rounded-full" style={{ backgroundColor: "#68DB7D" }} />
+            ))}
+          </div>
+
+          {/* Result card */}
+          <div className="mt-6 rounded-2xl border p-7 md:p-10" style={{ backgroundColor: "#102E26", borderColor: "#23483D" }}>
+
+            {/* Header row: label + donut */}
+            <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+              <div className="flex-1">
+                <p className="text-[11px] font-black uppercase tracking-[0.16em]" style={{ color: "#68DB7D" }}>
+                  Recommended path
+                </p>
+                <p className="mt-1 text-[11px] font-semibold" style={{ color: "#889B94" }}>
+                  {result.label}
+                </p>
+                <h2 className="mt-4 text-[34px] font-black leading-[1.02] md:text-[46px]" style={{ color: "#F3F5F4" }}>
+                  {result.title}
+                </h2>
+                <p className="mt-1.5 text-[15px] font-bold" style={{ color: "#68DB7D" }}>
+                  {result.tagline}
+                </p>
+              </div>
+              <div className="flex justify-center md:block">
+                <DonutChart pct={result.readinessPct} />
+              </div>
+            </div>
+
+            {/* Explanation */}
+            <p className="mt-5 text-[15px] leading-7" style={{ color: "#C7D0CB" }}>
+              {result.body}
+            </p>
+
+            {/* Why this fits */}
+            <div className="mt-6 rounded-xl border p-5" style={{ borderColor: "#1B3B31", backgroundColor: "#081D17" }}>
+              <p className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: "#68DB7D" }}>
+                Why this fits your answers
+              </p>
+              <ul className="mt-3 space-y-2.5">
+                {[
+                  `${industry} industry context`,
+                  `Your organization ${challenge}`,
+                  `${journey} — ${size}`,
+                ].map((item) => (
+                  <li className="flex items-start gap-3 text-[13px] leading-5" key={item} style={{ color: "#C7D0CB" }}>
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: "#68DB7D" }} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Suggested next steps */}
+            <div className="mt-6">
+              <p className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: "#889B94" }}>
+                Suggested next steps
+              </p>
+              <ol className="mt-3 space-y-3">
+                {result.nextSteps.map((step, i) => (
+                  <li className="flex items-start gap-3 text-[13px] leading-5" key={i} style={{ color: "#C7D0CB" }}>
+                    <span
+                      className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-black"
+                      style={{ backgroundColor: "#1B3B31", color: "#68DB7D" }}
+                    >
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                className="inline-flex min-h-11 items-center justify-center rounded-full px-7 text-sm font-extrabold transition"
+                href={result.primaryCTA.href}
+                style={{ backgroundColor: "#68DB7D", color: "#031915" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#5FFF7D"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#68DB7D"; }}
+              >
+                {result.primaryCTA.label}
+              </a>
+              <a
+                className="inline-flex min-h-11 items-center justify-center rounded-full border px-7 text-sm font-extrabold transition"
+                href={result.secondaryCTA.href}
+                style={{ borderColor: "#23483D", color: "#F3F5F4" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#68DB7D"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#23483D"; }}
+              >
+                {result.secondaryCTA.label}
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-5 text-center">
+            <button
+              className="text-sm transition hover:opacity-80"
+              onClick={onReset}
+              style={{ color: "#889B94" }}
+              type="button"
+            >
+              ← Start over
+            </button>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function QuizSection() {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState<Answers>({});
+  const [done, setDone] = useState(false);
+
+  const current = steps[step];
+  const selected = answers[step];
+  const isLast = step === steps.length - 1;
+
+  function handleNext() {
+    if (!selected) return;
+    if (isLast) {
+      setDone(true);
+    } else {
+      setStep((s) => s + 1);
+    }
+  }
+
+  function handleBack() {
+    if (step > 0) setStep((s) => s - 1);
+  }
+
+  function handleReset() {
+    setStep(0);
+    setAnswers({});
+    setDone(false);
+  }
+
+  if (done) {
+    return (
+      <ResultPanel
+        answers={answers}
+        onReset={handleReset}
+        result={scoreAnswers(answers)}
+      />
+    );
+  }
+
+  return (
+    <section className="pb-24 pt-10 md:pb-[92px]" style={{ backgroundColor: "#0C241D" }}>
+      <Container>
+        <div className="mx-auto max-w-[752px]">
+          {/* Progress bars */}
+          <div className="flex gap-2">
+            {steps.map((_, i) => (
+              <div
+                key={i}
+                className="h-[3px] flex-1 rounded-full transition-colors duration-300"
+                style={{ backgroundColor: i <= step ? "#68DB7D" : "#1B3B31" }}
+              />
+            ))}
+          </div>
+
+          {/* Question card */}
+          <div
+            className="mt-6 rounded-2xl border p-7 md:p-8"
+            style={{ backgroundColor: "#102E26", borderColor: "#23483D" }}
+          >
+            <p className="text-[11px] font-black uppercase tracking-[0.16em]" style={{ color: "#68DB7D" }}>
+              {current.number}
+            </p>
+            <h2
+              className="mt-2 text-[26px] font-black leading-[1.1] md:text-[34px]"
+              style={{ color: "#F3F5F4" }}
+            >
+              {current.title}
+            </h2>
+            <p className="mt-2 text-sm leading-6" style={{ color: "#889B94" }}>
+              {current.subtitle}
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {current.options.map((opt) => (
+                <OptionCard
+                  key={opt.id}
+                  onSelect={() => setAnswers((a) => ({ ...a, [step]: opt.id }))}
+                  option={opt}
+                  selected={selected === opt.id}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="mt-5 flex items-center justify-between">
+            <button
+              className="rounded-full border px-6 py-2.5 text-sm font-extrabold transition"
+              disabled={step === 0}
+              onClick={handleBack}
+              style={{
+                borderColor: step === 0 ? "#1B3B31" : "#23483D",
+                color: step === 0 ? "#889B94" : "#F3F5F4",
+                opacity: step === 0 ? 0.45 : 1,
+                cursor: step === 0 ? "default" : "pointer",
+              }}
+              type="button"
+            >
+              Back
+            </button>
+            <button
+              className="inline-flex items-center gap-2 rounded-full px-8 py-2.5 text-sm font-extrabold transition"
+              disabled={!selected}
+              onClick={handleNext}
+              style={{
+                backgroundColor: selected ? "#68DB7D" : "#0a2e27",
+                color: selected ? "#031915" : "#889B94",
+                opacity: selected ? 1 : 0.6,
+                cursor: selected ? "pointer" : "default",
+              }}
+              type="button"
+            >
+              {isLast ? "See recommendation" : "Next"} →
+            </button>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+export function AssessmentPage() {
+  const [locale, setLocale] = useState<Locale>("en");
+
+  return (
+    <div lang="en" style={{ backgroundColor: "#071915" }}>
+      <SiteHeader active="" allowArabic={false} locale={locale} setLocale={setLocale} />
+      <main>
+        <AssessmentHero />
+        <QuizSection />
+      </main>
+      <SiteFooter allowArabic={false} locale={locale} />
+    </div>
+  );
+}

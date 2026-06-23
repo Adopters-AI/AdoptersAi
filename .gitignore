@@ -1,0 +1,37 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# environment variables — never commit these
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# logs and debug output
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+*.err
+
+# design / scratch files
+figma-*.png
+*-check.png
+
+# misc
+*.pem

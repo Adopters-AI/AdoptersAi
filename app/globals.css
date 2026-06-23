@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --foreground: #f4f6f5;
+  --brand-dark: #031915;
+  --brand-darker: #021410;
+  --brand-card: #0a2e27;
+  --brand-card-soft: #163a33;
+  --brand-green: #5be45e;
+  --brand-green-bright: #6ef071;
+  --brand-mint: #25d99d;
+  --paper: #f4f6f5;
+  --muted-dark: #a7bdb6;
+  --muted-light: #4a5c57;
+  --border-dark: #163a33;
+  --border-light: #dde4e1;
+}
+
+@theme inline {
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-darker: var(--brand-darker);
+  --color-brand-card: var(--brand-card);
+  --color-brand-card-soft: var(--brand-card-soft);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-bright: var(--brand-green-bright);
+  --color-brand-mint: var(--brand-mint);
+  --color-paper: var(--paper);
+  --color-muted-dark: var(--muted-dark);
+  --color-muted-light: var(--muted-light);
+  --color-border-dark: var(--border-dark);
+  --color-border-light: var(--border-light);
+  --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--brand-dark);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+  }
+}
+
+.hero-grid {
+  background:
+    radial-gradient(circle at 58% 18%, rgba(30, 215, 124, 0.12), transparent 26%),
+    linear-gradient(135deg, rgba(3, 37, 29, 0.95), rgba(2, 20, 16, 0.98) 48%, #021410);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-gradient-green {
+  background: linear-gradient(93deg, #5be45e 2.36%, #25d99d 97.64%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -1,0 +1,49 @@
+# Project Structure for: c:\Users\kareem\Desktop\kryptonic\website
+
+## Root-level Files
+- figma-home.png
+- next-env.d.ts (auto-generated)
+- next.config.ts
+- package.json
+- package-lock.json
+- postcss.config.mjs
+- tsconfig.json
+
+## Root-level Directories
+- .agents/
+- .claude/
+- .git/
+- .next/ (build output)
+- app/
+- components/
+- node_modules/
+
+## App Directory Structure
+app/
+├── globals.css
+├── layout.tsx
+├── page.tsx (Home page)
+└── services/
+    └── page.tsx
+
+## Components Directory
+components/
+├── language-toggle.tsx
+├── services-page.tsx
+├── site-shell.tsx
+└── ui.tsx
+
+## Config Files
+- tsconfig.json
+- next.config.ts
+- postcss.config.mjs
+- package.json
+
+## Hidden/Config Directories
+- .claude/ (Claude Code settings)
+  └── settings.local.json
+- .git/ (version control)
+- .next/ (Next.js build output)
+- .agents/ (agent files)
+
+## No .env files found
