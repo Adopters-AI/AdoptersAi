@@ -141,7 +141,7 @@ function ArchitectureLayers() {
     <div className="overflow-hidden rounded-2xl border border-[rgba(37,217,157,0.08)] bg-white">
       {architectureLayers.map(([layer, title, body], index) => (
         <div
-          className={`grid min-h-[112px] items-center gap-6 px-6 md:grid-cols-[76px_240px_1fr] md:px-0 ${
+          className={`grid min-h-[112px] items-center gap-4 px-6 py-6 md:gap-6 md:py-0 md:grid-cols-[76px_240px_1fr] md:px-0 ${
             index < architectureLayers.length - 1 ? "border-b border-[rgba(37,217,157,0.08)]" : ""
           } bg-[linear-gradient(90deg,rgba(91,228,94,0.08)_0%,#ffffff_36%)]`}
           key={layer}

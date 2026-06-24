@@ -163,7 +163,7 @@ function AcademyHero() {
       <Container className="relative z-10 grid min-h-[560px] items-center gap-14 lg:grid-cols-[1fr_0.92fr]">
         <div className="max-w-[560px]">
           <Label dark>Adopters AI Academy</Label>
-          <h1 className="mt-7 text-[44px] font-black leading-[0.98] tracking-normal md:text-[72px]">
+          <h1 className="mt-7 text-[34px] font-black leading-[1.0] tracking-normal sm:text-[44px] md:text-[72px]">
             Practical AI education for teams building{" "}
             <em className="not-italic text-gradient-green">real systems.</em>
           </h1>
@@ -227,7 +227,7 @@ function WhySection() {
                   Why the AI Academy
                 </span>
               </div>
-              <h2 className="mt-8 max-w-[650px] text-[42px] font-black leading-[1.12] tracking-normal text-[#031915] md:text-[56px] lg:text-[58px]">
+              <h2 className="mt-8 max-w-[650px] text-[30px] font-black leading-[1.12] tracking-normal text-[#031915] sm:text-[42px] md:text-[56px] lg:text-[58px]">
                 AI training should help teams make better decisions and build better systems.
               </h2>
             </div>
@@ -270,7 +270,7 @@ function TracksSection() {
                   Planned Learning Tracks
                 </span>
               </div>
-              <h2 className="mt-7 max-w-[700px] text-[42px] font-black leading-[1.05] tracking-normal text-white md:text-[56px] lg:text-[58px]">
+              <h2 className="mt-7 max-w-[700px] text-[30px] font-black leading-[1.05] tracking-normal text-white sm:text-[42px] md:text-[56px] lg:text-[58px]">
                 Three paths for different AI maturity levels.
               </h2>
             </div>
@@ -343,7 +343,7 @@ function JourneySection() {
                   Learning Journey
                 </span>
               </div>
-              <h2 className="mt-7 max-w-[730px] text-[42px] font-black leading-[1.08] tracking-normal text-white md:text-[56px] lg:text-[58px]">
+              <h2 className="mt-7 max-w-[730px] text-[30px] font-black leading-[1.08] tracking-normal text-white sm:text-[42px] md:text-[56px] lg:text-[58px]">
                 A simple path from understanding to application.
               </h2>
             </div>
@@ -385,7 +385,7 @@ function CurriculumSection() {
                 Curriculum Preview
               </span>
             </div>
-            <h2 className="mt-8 max-w-[820px] text-[42px] font-black leading-[1.08] tracking-normal text-[#031915] md:text-[56px] lg:text-[58px]">
+            <h2 className="mt-8 max-w-[820px] text-[30px] font-black leading-[1.08] tracking-normal text-[#031915] sm:text-[42px] md:text-[56px] lg:text-[58px]">
               <span className="block">Planned topics that</span>
               <span className="block">matter for enterprise AI</span>
               <span className="block">adoption.</span>
@@ -427,9 +427,9 @@ function FormatsSection() {
                   Planned Formats
                 </span>
               </div>
-              <h2 className="mt-7 max-w-none text-[42px] font-black leading-[1.08] tracking-normal text-white md:text-[56px] lg:text-[58px]">
-                <span className="block whitespace-nowrap">Flexible formats for</span>
-                <span className="block whitespace-nowrap">individuals and teams.</span>
+              <h2 className="mt-7 max-w-none text-[32px] font-black leading-[1.08] tracking-normal text-white sm:text-[42px] md:text-[56px] lg:text-[58px]">
+                <span className="block">Flexible formats for</span>
+                <span className="block">individuals and teams.</span>
               </h2>
             </div>
             <p className="max-w-[650px] text-[20px] leading-[1.62] text-muted-dark lg:pt-16">
@@ -547,7 +547,7 @@ function WaitlistSection() {
 
           {/* Right: form card */}
           <AnimateIn variant="right">
-          <div className="w-full rounded-[22px] border border-[rgba(135,190,175,0.2)] bg-[#163a33] px-[59px] py-[35px]">
+          <div className="w-full rounded-[22px] border border-[rgba(135,190,175,0.2)] bg-[#163a33] px-6 py-8 sm:px-10 lg:px-[59px] lg:py-[35px]">
             <h3 className="text-xl font-black text-white">AI Academy waitlist</h3>
             <p className="mt-2 text-sm leading-6 text-muted-dark">
               Tell us who you are and what your team wants to learn. The program is coming soon.

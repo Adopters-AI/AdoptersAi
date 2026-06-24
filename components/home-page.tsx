@@ -490,10 +490,10 @@ function TechnologySection({ locale }: { locale: Locale }) {
             </p>
           </div>
         </AnimateIn>
-        <div className="mx-auto mt-10 grid max-w-[900px] grid-cols-3 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="mx-auto mt-10 grid max-w-[900px] grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {technologyLogos.map((logo, index) => (
             <AnimateIn delay={index * 80} key={logo.name} variant="up">
-              <div className="grid h-[80px] place-items-center rounded-xl bg-white px-6 shadow-sm">
+              <div className="grid h-[80px] place-items-center rounded-xl bg-white px-4 shadow-sm sm:px-6">
                 <img alt={logo.name} className={logo.className} src={logo.src.src} />
               </div>
             </AnimateIn>
