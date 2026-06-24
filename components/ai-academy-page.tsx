@@ -357,7 +357,7 @@ function JourneySection() {
         <div className="overflow-hidden rounded-[28px] border border-[rgba(135,190,175,0.18)] bg-[rgba(8,49,41,0.48)] lg:grid lg:grid-cols-4">
           {journeySteps.map((step) => (
             <article
-              className="min-h-[210px] border-[rgba(135,190,175,0.18)] p-8 md:p-10 lg:border-r lg:last:border-r-0"
+              className="min-h-[210px] border-b border-[rgba(135,190,175,0.18)] p-8 last:border-b-0 md:p-10 lg:border-b-0 lg:border-r lg:last:border-r-0"
               key={step.label}
             >
               <span className="text-[13px] font-black uppercase tracking-[0.12em] text-[#5be45e]">{step.label}</span>
