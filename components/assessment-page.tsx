@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimateIn } from "@/components/animate-in";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Container, Label } from "@/components/ui";
 import watermarkLogo from "@/assets/watermark.png.png";
@@ -244,15 +245,17 @@ function AssessmentHero() {
         src={watermarkLogo.src}
       />
       <Container className="relative z-10">
-        <Label dark>AI Assessment</Label>
-        <h1 className="mt-6 max-w-[680px] text-[40px] font-black leading-[1.05] md:text-[60px]" style={{ color: "#F3F5F4" }}>
-          Find your best AI path in{" "}
-          <em className="not-italic" style={{ color: "#68DB7D" }}>60 seconds.</em>
-        </h1>
-        <p className="mt-5 max-w-[520px] text-base leading-7" style={{ color: "#C7D0CB" }}>
-          Answer four quick questions and get a recommended starting point: Strategy, Build,
-          Operate, or Adopters Intelligent.
-        </p>
+        <AnimateIn variant="up">
+          <Label dark>AI Assessment</Label>
+          <h1 className="mt-6 max-w-[680px] text-[40px] font-black leading-[1.05] md:text-[60px]" style={{ color: "#F3F5F4" }}>
+            Find your best AI path in{" "}
+            <em className="not-italic" style={{ color: "#68DB7D" }}>60 seconds.</em>
+          </h1>
+          <p className="mt-5 max-w-[520px] text-base leading-7" style={{ color: "#C7D0CB" }}>
+            Answer four quick questions and get a recommended starting point: Strategy, Build,
+            Operate, or Adopters Intelligent.
+          </p>
+        </AnimateIn>
       </Container>
     </section>
   );

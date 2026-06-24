@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { AnimateIn } from "@/components/animate-in";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Container, Label } from "@/components/ui";
 import watermarkLogo from "@/assets/watermark.png.png";
@@ -45,15 +46,17 @@ function ContactHero() {
         src={watermarkLogo.src}
       />
       <Container className="relative z-10">
-        <Label dark>Book a call</Label>
-        <h1 className="mt-7 max-w-[680px] text-[44px] font-black leading-[1.02] md:text-[68px]">
-          Tell us where you are. We'll help you choose the{" "}
-          <em className="not-italic text-gradient-green">right AI path.</em>
-        </h1>
-        <p className="mt-6 max-w-[560px] text-lg leading-8 text-muted-dark">
-          Share your context and Adopters will help map the right next step: strategy, product demo,
-          build support, or managed operations.
-        </p>
+        <AnimateIn variant="up">
+          <Label dark>Book a call</Label>
+          <h1 className="mt-7 max-w-[680px] text-[44px] font-black leading-[1.02] md:text-[68px]">
+            Tell us where you are. We'll help you choose the{" "}
+            <em className="not-italic text-gradient-green">right AI path.</em>
+          </h1>
+          <p className="mt-6 max-w-[560px] text-lg leading-8 text-muted-dark">
+            Share your context and Adopters will help map the right next step: strategy, product demo,
+            build support, or managed operations.
+          </p>
+        </AnimateIn>
       </Container>
     </section>
   );
@@ -151,6 +154,7 @@ function ContactFormSection() {
       <Container>
         <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">
           {/* Left: Form card */}
+          <AnimateIn variant="left">
           <div className="rounded-[14px] border border-[#163a33] bg-[#0a2e27] p-7 md:p-8">
             {status === "success" ? (
               <div className="flex min-h-[340px] flex-col items-center justify-center text-center">
@@ -240,8 +244,10 @@ function ContactFormSection() {
               </form>
             )}
           </div>
+          </AnimateIn>
 
           {/* Right: Info + help cards */}
+          <AnimateIn variant="right">
           <div className="space-y-5">
             <div className="rounded-[14px] border border-[#163a33] bg-[#0a2e27] p-6">
               <span className="text-[11px] font-black uppercase tracking-[0.12em] text-brand-green">
@@ -288,6 +294,7 @@ function ContactFormSection() {
               </a>
             </div>
           </div>
+          </AnimateIn>
         </div>
       </Container>
     </section>
@@ -300,13 +307,16 @@ function FaqSection() {
   return (
     <section className="bg-paper py-24 text-[#031915] md:py-[92px]">
       <Container>
-        <Label>FQA</Label>
-        <h2 className="mt-5 max-w-[480px] text-[36px] font-black leading-[1.1] md:text-[44px]">
-          Common questions before contacting the team.
-        </h2>
+        <AnimateIn variant="up">
+          <Label>FQA</Label>
+          <h2 className="mt-5 max-w-[480px] text-[36px] font-black leading-[1.1] md:text-[44px]">
+            Common questions before contacting the team.
+          </h2>
+        </AnimateIn>
         <div className="mt-12 divide-y divide-border-light border-t border-border-light">
           {faqs.map((faq, i) => (
-            <div key={faq.q}>
+            <AnimateIn delay={i * 80} key={faq.q} variant="up">
+            <div>
               <button
                 className="flex w-full items-center justify-between gap-8 py-5 text-left"
                 onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
@@ -321,6 +331,7 @@ function FaqSection() {
                 <p className="pb-5 pr-14 text-sm leading-6 text-muted-light">{faq.a}</p>
               )}
             </div>
+            </AnimateIn>
           ))}
         </div>
       </Container>

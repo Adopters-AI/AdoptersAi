@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimateIn } from "@/components/animate-in";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Button, Container, Label, SectionHeader } from "@/components/ui";
 import watermarkLogo from "@/assets/watermark.png.png";
@@ -217,28 +218,30 @@ function WhySection() {
   return (
     <section className="bg-[#f7f8f7] py-20 text-[#031915] md:py-[86px]">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[0.95fr_1fr] lg:items-end">
-          <div>
-            <div className="inline-flex items-center gap-5">
-              <span className="h-0.5 w-8 shrink-0 bg-brand-green" />
-              <span className="text-[12px] font-black uppercase tracking-[0.18em] text-[#1d695e]">
-                Why the AI Academy
-              </span>
+        <AnimateIn variant="up">
+          <div className="grid gap-10 lg:grid-cols-[0.95fr_1fr] lg:items-end">
+            <div>
+              <div className="inline-flex items-center gap-5">
+                <span className="h-0.5 w-8 shrink-0 bg-brand-green" />
+                <span className="text-[12px] font-black uppercase tracking-[0.18em] text-[#1d695e]">
+                  Why the AI Academy
+                </span>
+              </div>
+              <h2 className="mt-8 max-w-[650px] text-[42px] font-black leading-[1.12] tracking-normal text-[#031915] md:text-[56px] lg:text-[58px]">
+                AI training should help teams make better decisions and build better systems.
+              </h2>
             </div>
-            <h2 className="mt-8 max-w-[650px] text-[42px] font-black leading-[1.12] tracking-normal text-[#031915] md:text-[56px] lg:text-[58px]">
-              AI training should help teams make better decisions and build better systems.
-            </h2>
+            <p className="max-w-[650px] text-[20px] leading-[1.62] text-[#50615c] lg:pb-4">
+              Teams often need more than awareness sessions. Adopters AI Academy is planned to help organizations build
+              shared AI fluency, practical skills, and responsible adoption habits.
+            </p>
           </div>
-          <p className="max-w-[650px] text-[20px] leading-[1.62] text-[#50615c] lg:pb-4">
-            Teams often need more than awareness sessions. Adopters AI Academy is planned to help organizations build
-            shared AI fluency, practical skills, and responsible adoption habits.
-          </p>
-        </div>
+        </AnimateIn>
         <div className="mt-14 grid gap-6 md:grid-cols-3">
           {whyFeatures.map(({ title, body }, i) => (
+            <AnimateIn delay={i * 120} key={title} variant="up">
             <article
-              className="rounded-[14px] border border-border-light bg-white p-7 shadow-[0_8px_28px_rgba(0,31,24,0.05)]"
-              key={title}
+              className="h-full rounded-[14px] border border-border-light bg-white p-7 shadow-[0_8px_28px_rgba(0,31,24,0.05)]"
             >
               <div className="mb-5 flex h-8 w-8 items-center justify-center rounded-md bg-[linear-gradient(135deg,rgba(91,228,94,0.5),rgba(37,217,157,0.5))] text-[13px] font-black text-[#031915]">
                 {i + 1}
@@ -246,6 +249,7 @@ function WhySection() {
               <h3 className="text-[19px] font-black leading-[1.2]">{title}</h3>
               <p className="mt-3 text-sm leading-6 text-muted-light">{body}</p>
             </article>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -257,28 +261,30 @@ function TracksSection() {
   return (
     <section className="bg-brand-dark py-24 text-white md:py-[92px]" id="tracks">
       <Container>
-        <div className="grid gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-start">
-          <div>
-            <div className="inline-flex items-center gap-5">
-              <span className="h-0.5 w-8 shrink-0 bg-brand-green" />
-              <span className="text-[12px] font-black uppercase tracking-[0.18em] text-brand-green">
-                Planned Learning Tracks
-              </span>
+        <AnimateIn variant="up">
+          <div className="grid gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-start">
+            <div>
+              <div className="inline-flex items-center gap-5">
+                <span className="h-0.5 w-8 shrink-0 bg-brand-green" />
+                <span className="text-[12px] font-black uppercase tracking-[0.18em] text-brand-green">
+                  Planned Learning Tracks
+                </span>
+              </div>
+              <h2 className="mt-7 max-w-[700px] text-[42px] font-black leading-[1.05] tracking-normal text-white md:text-[56px] lg:text-[58px]">
+                Three paths for different AI maturity levels.
+              </h2>
             </div>
-            <h2 className="mt-7 max-w-[700px] text-[42px] font-black leading-[1.05] tracking-normal text-white md:text-[56px] lg:text-[58px]">
-              Three paths for different AI maturity levels.
-            </h2>
+            <p className="max-w-[650px] text-[20px] leading-[1.62] text-muted-dark lg:pt-14">
+              Each planned track is organized around a different audience and maturity level, so visitors can quickly
+              understand the right starting point.
+            </p>
           </div>
-          <p className="max-w-[650px] text-[20px] leading-[1.62] text-muted-dark lg:pt-14">
-            Each planned track is organized around a different audience and maturity level, so visitors can quickly
-            understand the right starting point.
-          </p>
-        </div>
+        </AnimateIn>
         <div className="mt-16 grid gap-7 lg:grid-cols-3">
-          {tracks.map((track) => (
+          {tracks.map((track, index) => (
+            <AnimateIn delay={index * 120} key={track.number} variant="up">
             <article
-              className="flex min-h-[430px] flex-col rounded-[18px] border border-[rgba(135,190,175,0.18)] bg-[linear-gradient(180deg,rgba(8,49,41,0.82)_0%,rgba(6,36,30,0.92)_100%)] p-7 md:p-[34px] lg:min-h-[565px]"
-              key={track.number}
+              className="flex min-h-[430px] h-full flex-col rounded-[18px] border border-[rgba(135,190,175,0.18)] bg-[linear-gradient(180deg,rgba(8,49,41,0.82)_0%,rgba(6,36,30,0.92)_100%)] p-7 md:p-[34px] lg:min-h-[565px]"
             >
               <div className="flex items-center justify-between gap-3">
                 <span className="text-[12px] font-black uppercase tracking-[0.16em] text-brand-green">
@@ -316,6 +322,7 @@ function TracksSection() {
                 <p className="text-[14px] leading-5 text-white/42">{track.outcome}</p>
               </div>
             </article>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -327,24 +334,27 @@ function JourneySection() {
   return (
     <section className="bg-[#06251f] py-24 text-white md:py-[118px]">
       <Container>
-        <div className="grid gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-center">
-          <div>
-            <div className="inline-flex items-center gap-5">
-              <span className="h-0.5 w-8 shrink-0 bg-[#5be45e]" />
-              <span className="text-[12px] font-black uppercase tracking-[0.18em] text-[#5be45e]">
-                Learning Journey
-              </span>
+        <AnimateIn variant="up">
+          <div className="grid gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-center">
+            <div>
+              <div className="inline-flex items-center gap-5">
+                <span className="h-0.5 w-8 shrink-0 bg-[#5be45e]" />
+                <span className="text-[12px] font-black uppercase tracking-[0.18em] text-[#5be45e]">
+                  Learning Journey
+                </span>
+              </div>
+              <h2 className="mt-7 max-w-[730px] text-[42px] font-black leading-[1.08] tracking-normal text-white md:text-[56px] lg:text-[58px]">
+                A simple path from understanding to application.
+              </h2>
             </div>
-            <h2 className="mt-7 max-w-[730px] text-[42px] font-black leading-[1.08] tracking-normal text-white md:text-[56px] lg:text-[58px]">
-              A simple path from understanding to application.
-            </h2>
+            <p className="max-w-[640px] text-[20px] leading-[1.6] text-white/50 lg:justify-self-end">
+              The AI Academy is designed to move teams from clear understanding to practical application through a
+              simple, structured learning journey.
+            </p>
           </div>
-          <p className="max-w-[640px] text-[20px] leading-[1.6] text-white/50 lg:justify-self-end">
-            The AI Academy is designed to move teams from clear understanding to practical application through a
-            simple, structured learning journey.
-          </p>
-        </div>
-        <div className="mt-16 overflow-hidden rounded-[28px] border border-[rgba(135,190,175,0.18)] bg-[rgba(8,49,41,0.48)] lg:grid lg:grid-cols-4">
+        </AnimateIn>
+        <AnimateIn className="mt-16" variant="up">
+        <div className="overflow-hidden rounded-[28px] border border-[rgba(135,190,175,0.18)] bg-[rgba(8,49,41,0.48)] lg:grid lg:grid-cols-4">
           {journeySteps.map((step) => (
             <article
               className="min-h-[210px] border-[rgba(135,190,175,0.18)] p-8 md:p-10 lg:border-r lg:last:border-r-0"
@@ -356,6 +366,7 @@ function JourneySection() {
             </article>
           ))}
         </div>
+        </AnimateIn>
       </Container>
     </section>
   );
@@ -365,6 +376,7 @@ function CurriculumSection() {
   return (
     <section className="bg-white py-24 text-[#031915] md:py-[92px]">
       <Container>
+        <AnimateIn variant="up">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1fr] lg:items-end">
           <div>
             <div className="inline-flex items-center gap-5">
@@ -383,16 +395,18 @@ function CurriculumSection() {
             The planned curriculum focuses on the topics teams need most when moving from AI interest to real adoption.
           </p>
         </div>
+        </AnimateIn>
         <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {curriculumModules.map((mod) => (
+          {curriculumModules.map((mod, index) => (
+            <AnimateIn delay={index * 80} key={mod.title} variant="up">
             <article
-              className="rounded-[14px] border border-border-light bg-white p-7 shadow-[0_4px_20px_rgba(0,31,24,0.04)]"
-              key={mod.title}
+              className="h-full rounded-[14px] border border-border-light bg-white p-7 shadow-[0_4px_20px_rgba(0,31,24,0.04)]"
             >
               <span className="text-[11px] font-black uppercase tracking-[0.12em] text-[#0f7f63]">Module</span>
               <h3 className="mt-3 text-[19px] font-black leading-[1.25]">{mod.title}</h3>
               <p className="mt-3 text-sm leading-6 text-muted-light">{mod.body}</p>
             </article>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -404,34 +418,37 @@ function FormatsSection() {
   return (
     <section className="bg-brand-dark py-24 text-white md:py-[92px]">
       <Container>
-        <div className="grid gap-8 lg:grid-cols-[760px_1fr] lg:items-start">
-          <div>
-            <div className="inline-flex items-center gap-5">
-              <span className="h-0.5 w-8 shrink-0 bg-[#25d99d]" />
-              <span className="text-[12px] font-black uppercase tracking-[0.18em] text-[#25d99d]">
-                Planned Formats
-              </span>
+        <AnimateIn variant="up">
+          <div className="grid gap-8 lg:grid-cols-[760px_1fr] lg:items-start">
+            <div>
+              <div className="inline-flex items-center gap-5">
+                <span className="h-0.5 w-8 shrink-0 bg-[#25d99d]" />
+                <span className="text-[12px] font-black uppercase tracking-[0.18em] text-[#25d99d]">
+                  Planned Formats
+                </span>
+              </div>
+              <h2 className="mt-7 max-w-none text-[42px] font-black leading-[1.08] tracking-normal text-white md:text-[56px] lg:text-[58px]">
+                <span className="block whitespace-nowrap">Flexible formats for</span>
+                <span className="block whitespace-nowrap">individuals and teams.</span>
+              </h2>
             </div>
-            <h2 className="mt-7 max-w-none text-[42px] font-black leading-[1.08] tracking-normal text-white md:text-[56px] lg:text-[58px]">
-              <span className="block whitespace-nowrap">Flexible formats for</span>
-              <span className="block whitespace-nowrap">individuals and teams.</span>
-            </h2>
+            <p className="max-w-[650px] text-[20px] leading-[1.62] text-muted-dark lg:pt-16">
+              Delivery formats are planned to support individuals, focused teams, and larger organizations preparing for
+              AI adoption.
+            </p>
           </div>
-          <p className="max-w-[650px] text-[20px] leading-[1.62] text-muted-dark lg:pt-16">
-            Delivery formats are planned to support individuals, focused teams, and larger organizations preparing for
-            AI adoption.
-          </p>
-        </div>
+        </AnimateIn>
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {formats.map((fmt) => (
+          {formats.map((fmt, index) => (
+            <AnimateIn delay={index * 100} key={fmt.tag} variant="up">
             <article
-              className="min-h-[230px] rounded-[18px] border border-[rgba(135,190,175,0.18)] bg-[linear-gradient(180deg,rgba(8,49,41,0.82)_0%,rgba(6,36,30,0.92)_100%)] p-8"
-              key={fmt.tag}
+              className="min-h-[230px] h-full rounded-[18px] border border-[rgba(135,190,175,0.18)] bg-[linear-gradient(180deg,rgba(8,49,41,0.82)_0%,rgba(6,36,30,0.92)_100%)] p-8"
             >
               <span className="text-[12px] font-black uppercase tracking-[0.16em] text-[#25d99d]">{fmt.tag}</span>
               <h3 className="mt-8 text-[22px] font-black leading-[1.2]">{fmt.title}</h3>
               <p className="mt-5 text-[16px] leading-7 text-white/42">{fmt.body}</p>
             </article>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -499,6 +516,7 @@ function WaitlistSection() {
       <Container>
         <div className="grid gap-12 lg:grid-cols-[520px_minmax(0,1fr)] lg:items-start lg:gap-[59px]">
           {/* Left: text + help card */}
+          <AnimateIn variant="left">
           <div>
             <Label dark>Join the Waitlist</Label>
             <h2 className="mt-5 max-w-[520px] text-[40px] font-black leading-[1.05] text-white md:text-[50px]">
@@ -525,8 +543,10 @@ function WaitlistSection() {
               </a>
             </div>
           </div>
+          </AnimateIn>
 
           {/* Right: form card */}
+          <AnimateIn variant="right">
           <div className="w-full rounded-[22px] border border-[rgba(135,190,175,0.2)] bg-[#163a33] px-[59px] py-[35px]">
             <h3 className="text-xl font-black text-white">AI Academy waitlist</h3>
             <p className="mt-2 text-sm leading-6 text-muted-dark">
@@ -581,6 +601,7 @@ function WaitlistSection() {
               </div>
             </form>
           </div>
+          </AnimateIn>
         </div>
       </Container>
     </section>

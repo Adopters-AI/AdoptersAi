@@ -10,6 +10,7 @@ import watermarkLogo from "@/assets/watermark.png.png";
 import { useState } from "react";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Button, Container, Label, SectionHeader } from "@/components/ui";
+import { AnimateIn } from "@/components/animate-in";
 
 const copy = {
   en: {
@@ -312,26 +313,30 @@ function LifecycleSection({ locale }: { locale: Locale }) {
   return (
     <section className="bg-paper py-24 md:py-[118px]">
       <Container className={isAr ? "text-right" : ""}>
-        <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
-          <div>
-            <Label>{section.label}</Label>
-            <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] md:text-[42px] lg:text-5xl">{section.title}</h2>
+        <AnimateIn variant="up">
+          <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
+            <div>
+              <Label>{section.label}</Label>
+              <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] md:text-[42px] lg:text-5xl">{section.title}</h2>
+            </div>
+            <p className="text-base leading-7 text-muted-light">{section.body}</p>
           </div>
-          <p className="text-base leading-7 text-muted-light">{section.body}</p>
-        </div>
+        </AnimateIn>
         <div className="mt-14 grid border border-border-light bg-white lg:grid-cols-3">
           {phases.map((phase, index) => (
-            <article className="relative min-h-[260px] p-8 md:p-10 lg:p-12" key={phase.number}>
-              {index < phases.length - 1 ? (
-                <span className={`absolute top-0 hidden h-full w-px bg-border-light lg:block ${isAr ? "left-0" : "right-0"}`} />
-              ) : null}
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1e6d69]">{phase.eyebrow}</p>
-              <h3 className="mt-5 text-2xl font-black text-[#031915]">{phase.title}</h3>
-              <p className="mt-5 max-w-[340px] text-sm font-light leading-6 text-muted-light">{phase.body}</p>
-              <span className={`absolute top-6 text-5xl font-black text-brand-mint/30 md:top-8 ${isAr ? "left-8 md:left-10" : "right-8 md:right-10"}`}>
-                {phase.number}
-              </span>
-            </article>
+            <AnimateIn delay={index * 120} key={phase.number} variant="up">
+              <article className="relative min-h-[260px] p-8 md:p-10 lg:p-12">
+                {index < phases.length - 1 ? (
+                  <span className={`absolute top-0 hidden h-full w-px bg-border-light lg:block ${isAr ? "left-0" : "right-0"}`} />
+                ) : null}
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1e6d69]">{phase.eyebrow}</p>
+                <h3 className="mt-5 text-2xl font-black text-[#031915]">{phase.title}</h3>
+                <p className="mt-5 max-w-[340px] text-sm font-light leading-6 text-muted-light">{phase.body}</p>
+                <span className={`absolute top-6 text-5xl font-black text-brand-mint/30 md:top-8 ${isAr ? "left-8 md:left-10" : "right-8 md:right-10"}`}>
+                  {phase.number}
+                </span>
+              </article>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -346,23 +351,25 @@ function ServicesSection({ locale }: { locale: Locale }) {
   return (
     <section className="bg-brand-dark py-24 text-white md:py-[118px]" id="services">
       <Container className={isAr ? "text-right" : ""}>
-        <div className={`flex flex-col gap-6 md:flex-row md:items-end md:justify-between ${isAr ? "md:flex-row-reverse" : ""}`}>
-          <div>
-            <Label dark>{section.label}</Label>
-            <h2 className="mt-4 text-4xl font-black md:text-5xl">{section.title}</h2>
+        <AnimateIn variant="up">
+          <div className={`flex flex-col gap-6 md:flex-row md:items-end md:justify-between ${isAr ? "md:flex-row-reverse" : ""}`}>
+            <div>
+              <Label dark>{section.label}</Label>
+              <h2 className="mt-4 text-4xl font-black md:text-5xl">{section.title}</h2>
+            </div>
+            <a
+              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[linear-gradient(93deg,#5be45e_2.36%,#25d99d_97.64%)] px-6 text-sm font-extrabold text-brand-dark transition hover:opacity-90"
+              href="/services"
+            >
+              {section.cta} {arrow(locale)}
+            </a>
           </div>
-          <a
-            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[linear-gradient(93deg,#5be45e_2.36%,#25d99d_97.64%)] px-6 text-sm font-extrabold text-brand-dark transition hover:opacity-90"
-            href="/services"
-          >
-            {section.cta} {arrow(locale)}
-          </a>
-        </div>
+        </AnimateIn>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {section.cards.map((service) => (
+          {section.cards.map((service, index) => (
+            <AnimateIn delay={index * 120} key={service.number} variant="up">
             <article
-              className="rounded-2xl border border-white/10 bg-white p-7 text-[#031915] shadow-[0_0_0_1px_rgba(91,228,94,0.06),0_20px_55px_rgba(0,0,0,0.22)]"
-              key={service.number}
+              className="h-full rounded-2xl border border-white/10 bg-white p-7 text-[#031915] shadow-[0_0_0_1px_rgba(91,228,94,0.06),0_20px_55px_rgba(0,0,0,0.22)]"
             >
               <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-card text-xs font-black text-white">{service.number}</span>
               <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1e6d69]">{service.type}</p>
@@ -377,6 +384,7 @@ function ServicesSection({ locale }: { locale: Locale }) {
                 {service.meta}
               </div>
             </article>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -391,13 +399,16 @@ function ProductsSection({ locale }: { locale: Locale }) {
   return (
     <section className="bg-paper py-24 md:py-[118px]" id="products">
       <Container className={isAr ? "text-right" : ""}>
-        <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
-          <div>
-            <Label>{section.label}</Label>
-            <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] md:text-[42px] lg:text-5xl">{section.title}</h2>
+        <AnimateIn variant="up">
+          <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
+            <div>
+              <Label>{section.label}</Label>
+              <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] md:text-[42px] lg:text-5xl">{section.title}</h2>
+            </div>
+            <p className="text-base leading-7 text-muted-light">{section.body}</p>
           </div>
-          <p className="text-base leading-7 text-muted-light">{section.body}</p>
-        </div>
+        </AnimateIn>
+        <AnimateIn delay={100} variant="up">
         <article className="mt-12 rounded-2xl border border-border-light bg-white p-8 md:p-10">
           <div className={`flex flex-col gap-5 md:flex-row md:items-start md:justify-between ${isAr ? "md:flex-row-reverse" : ""}`}>
             <h3 className="text-2xl text-[#031915]">
@@ -417,6 +428,7 @@ function ProductsSection({ locale }: { locale: Locale }) {
             {section.link} {arrow(locale)}
           </a>
         </article>
+        </AnimateIn>
       </Container>
     </section>
   );
@@ -431,22 +443,26 @@ function UseCasesSection({ locale }: { locale: Locale }) {
   return (
     <section className="bg-brand-dark py-24 text-white md:py-[118px]" id="use-cases">
       <Container className={isAr ? "text-right" : ""}>
-        <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
-          <div>
-            <Label dark>{section.label}</Label>
-            <h2 className="mt-4 text-4xl font-black leading-[1.05] text-white md:text-[42px] lg:text-5xl">{section.title}</h2>
+        <AnimateIn variant="up">
+          <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
+            <div>
+              <Label dark>{section.label}</Label>
+              <h2 className="mt-4 text-4xl font-black leading-[1.05] text-white md:text-[42px] lg:text-5xl">{section.title}</h2>
+            </div>
+            <p className="text-base leading-7 text-muted-dark">{section.body}</p>
           </div>
-          <p className="text-base leading-7 text-muted-dark">{section.body}</p>
-        </div>
+        </AnimateIn>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {section.cards.map((useCase, idx) => (
-            <article className="flex flex-col rounded-xl border border-white/10 bg-brand-card-soft/30 p-8" key={useCase.title}>
+            <AnimateIn delay={idx * 100} key={useCase.title} variant="up">
+            <article className="flex h-full flex-col rounded-xl border border-white/10 bg-brand-card-soft/30 p-8">
               <h3 className="text-[12px] font-black uppercase leading-5 tracking-[0.12em] text-gradient-green">{useCase.title}</h3>
               <p className="mt-5 flex-1 text-sm font-light leading-6 text-muted-dark">{useCase.body}</p>
               <a className="mt-7 inline-flex border-t border-white/10 pt-5 text-xs font-semibold text-gradient-green transition-opacity hover:opacity-75" href={`/use-cases?category=${useCaseSlugs[idx]}#use-case-filter`}>
                 {section.link} {arrow(locale)}
               </a>
             </article>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -460,20 +476,24 @@ function TechnologySection({ locale }: { locale: Locale }) {
   return (
     <section className="bg-paper py-20 md:py-[82px]">
       <Container>
-        <div className="text-center">
-          <Label centered>{section.label}</Label>
-          <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] lg:whitespace-nowrap lg:text-5xl">
-            {section.title}
-          </h2>
-          <p className="mx-auto mt-5 max-w-[680px] text-base leading-7 text-muted-light">
-            {section.body}
-          </p>
-        </div>
+        <AnimateIn variant="up">
+          <div className="text-center">
+            <Label centered>{section.label}</Label>
+            <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] lg:whitespace-nowrap lg:text-5xl">
+              {section.title}
+            </h2>
+            <p className="mx-auto mt-5 max-w-[680px] text-base leading-7 text-muted-light">
+              {section.body}
+            </p>
+          </div>
+        </AnimateIn>
         <div className="mx-auto mt-10 grid max-w-[900px] grid-cols-3 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {technologyLogos.map((logo) => (
-            <div className="grid h-[80px] place-items-center rounded-xl bg-white px-6 shadow-sm" key={logo.name}>
-              <img alt={logo.name} className={logo.className} src={logo.src.src} />
-            </div>
+          {technologyLogos.map((logo, index) => (
+            <AnimateIn delay={index * 80} key={logo.name} variant="up">
+              <div className="grid h-[80px] place-items-center rounded-xl bg-white px-6 shadow-sm">
+                <img alt={logo.name} className={logo.className} src={logo.src.src} />
+              </div>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -488,6 +508,7 @@ function CTASection({ locale }: { locale: Locale }) {
   return (
     <section className="bg-brand-dark py-24" id="assessment">
       <Container>
+        <AnimateIn variant="up">
         <div className="overflow-hidden rounded-2xl bg-[linear-gradient(90deg,#5be45e_0%,#25d99d_100%)] p-8 text-[#031915] md:p-14">
           <div className={`grid gap-8 md:grid-cols-[1fr_345px] md:items-center ${isAr ? "md:grid-flow-col-dense" : ""}`}>
             <div className={isAr ? "text-right md:col-start-2" : ""}>
@@ -504,6 +525,7 @@ function CTASection({ locale }: { locale: Locale }) {
             </div>
           </div>
         </div>
+        </AnimateIn>
       </Container>
     </section>
   );

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Button, Container, Label } from "@/components/ui";
+import { AnimateIn } from "@/components/animate-in";
 import watermarkLogo from "@/assets/watermark.png.png";
 
 import alsLogo from "@/assets/casses/als.png";
@@ -236,10 +237,10 @@ export function UseCasesPage() {
           </div>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {visibleCards.map((useCase) => (
+            {visibleCards.map((useCase, index) => (
+              <AnimateIn delay={(index % 3) * 100} key={`${useCase.category}-${useCase.title}`} variant="up">
               <article
                 className="relative flex min-h-[265px] flex-col items-start rounded-[8px] border border-[#dde4e1] bg-white pb-[22px] pl-10 pr-7 pt-8 shadow-[0_18px_44px_0_rgba(3,25,21,0.08)]"
-                key={`${useCase.category}-${useCase.title}`}
               >
                 <span className="pointer-events-none absolute left-[1px] top-[1px] h-[calc(100%-2px)] w-[6px] rounded-[8px_0_0_8px] bg-[#1e7770]" />
                 <div className="flex items-center gap-4">
@@ -264,6 +265,7 @@ export function UseCasesPage() {
                   ))}
                 </div>
               </article>
+              </AnimateIn>
             ))}
           </div>
 

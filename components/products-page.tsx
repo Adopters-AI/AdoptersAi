@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Button, Container, Label } from "@/components/ui";
+import { AnimateIn } from "@/components/animate-in";
 import watermarkLogo from "@/assets/watermark.png.png";
 
 const heroProductTags = ["Institutional intelligence", "GraphRAG", "White-label"];
@@ -226,32 +227,40 @@ function IntelligentSection() {
           <ProductMetaCard items={intelligentMeta} />
         </div>
 
-        <div className="mt-16">
+        <AnimateIn className="mt-16" variant="up">
           <Label>Platform architecture</Label>
           <h3 className="mt-4 max-w-[532px] text-[34px] font-black leading-[1.15]">Five layers, one defensible core.</h3>
           <div className="mt-8">
             <ArchitectureLayers />
           </div>
-        </div>
+        </AnimateIn>
 
         <div className="mt-16">
-          <Label>Features & capabilities</Label>
-          <h3 className="mt-4 text-[34px] font-black leading-[1.15]">What Adopters Intelligent enables.</h3>
+          <AnimateIn variant="up">
+            <Label>Features & capabilities</Label>
+            <h3 className="mt-4 text-[34px] font-black leading-[1.15]">What Adopters Intelligent enables.</h3>
+          </AnimateIn>
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {intelligentFeatures.map((feature) => (
-              <FeatureCard feature={feature} key={feature[0]} />
+            {intelligentFeatures.map((feature, index) => (
+              <AnimateIn delay={index * 80} key={feature[0]} variant="up">
+                <FeatureCard feature={feature} />
+              </AnimateIn>
             ))}
           </div>
         </div>
 
         <div className="mt-16">
-          <Label>Impact</Label>
-          <h3 className="mt-4 text-[34px] font-black leading-[1.15]">Why Adopters Intelligent matters.</h3>
+          <AnimateIn variant="up">
+            <Label>Impact</Label>
+            <h3 className="mt-4 text-[34px] font-black leading-[1.15]">Why Adopters Intelligent matters.</h3>
+          </AnimateIn>
           <div className="mt-8 overflow-hidden rounded-[18px] border border-border-light bg-white md:grid md:grid-cols-3">
             {intelligentImpact.map((item, index) => (
-              <div className={index < intelligentImpact.length - 1 ? "border-b border-border-light md:border-b-0 md:border-r" : ""} key={item[0]}>
-                <ImpactCard item={item} />
-              </div>
+              <AnimateIn delay={index * 120} key={item[0]} variant="up">
+                <div className={`h-full ${index < intelligentImpact.length - 1 ? "border-b border-border-light md:border-b-0 md:border-r" : ""}`}>
+                  <ImpactCard item={item} />
+                </div>
+              </AnimateIn>
             ))}
           </div>
         </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Button, Container, Label, SectionHeader } from "@/components/ui";
+import { AnimateIn } from "@/components/animate-in";
 import watermarkLogo from "@/assets/watermark.png.png";
 
 const serviceLines = [
@@ -211,8 +212,9 @@ function ServiceLinesSection() {
           </h2>
         </div>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {serviceLines.map((line) => (
-            <a className="block rounded-2xl border border-white/10 bg-[#163a33] p-8 transition hover:border-white/20 hover:bg-[#1a4038]" href={line.anchor} key={line.number}>
+          {serviceLines.map((line, index) => (
+            <AnimateIn delay={index * 120} key={line.number} variant="up">
+            <a className="block h-full rounded-2xl border border-white/10 bg-[#163a33] p-8 transition hover:border-white/20 hover:bg-[#1a4038]" href={line.anchor}>
               <p className="text-[11px] font-black text-gradient-green">{line.number}</p>
               <h3 className="mt-4 text-xl font-black">{line.title}</h3>
               <p className="mt-3 min-h-20 text-sm leading-6 text-muted-dark">{line.body}</p>
@@ -221,6 +223,7 @@ function ServiceLinesSection() {
                 <span className="text-white">{line.duration}</span>
               </span>
             </a>
+            </AnimateIn>
           ))}
         </div>
       </Container>
@@ -293,8 +296,10 @@ function DetailSection({ section }: { section: (typeof detailSections)[number] }
           </p>
         </div>
         <div className="mt-12 grid gap-5 md:grid-cols-2">
-          {section.offerings.map((offering) => (
-            <OfferingCard dark={dark} key={offering.code} offering={offering} />
+          {section.offerings.map((offering, index) => (
+            <AnimateIn delay={index * 100} key={offering.code} variant="up">
+              <OfferingCard dark={dark} offering={offering} />
+            </AnimateIn>
           ))}
         </div>
       </Container>
