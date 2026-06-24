@@ -1,10 +1,10 @@
 "use client";
 
 import awsLogo from "@/assets/aws.png";
-import claudeLogo from "@/assets/claude.png";
+import claudeLogo from "@/assets/claude2.png";
 import googleLogo from "@/assets/ImageWithFallback-2.png";
-import openAiLogo from "@/assets/ImageWithFallback-3.png";
-import microsoftLogo from "@/assets/microsoft-logo-png-transparent-background-1.png";
+import openAiLogo from "@/assets/openai-logo.png";
+import microsoftLogo from "@/assets/microsoft2.png";
 import consoleMockup from "@/assets/ProductMockup.png";
 import watermarkLogo from "@/assets/watermark.png.png";
 import { useState } from "react";
@@ -17,7 +17,7 @@ const copy = {
     dir: "ltr",
     hero: {
       eyebrow: "Enterprise AI systems integrator",
-      title: ["AI Adopter", "assists enterprises in implementing", "AI solutions."],
+      title: ["Helping", "Enterprises Implement", "AI Solutions."],
       body:
         "Adopters helps enterprises move from AI ideas to deployed agents, intelligence platforms, monitored models, and measurable business outcomes.",
       primary: "Book a call",
@@ -327,7 +327,10 @@ function LifecycleSection({ locale }: { locale: Locale }) {
             <AnimateIn delay={index * 120} key={phase.number} variant="up">
               <article className="relative min-h-[260px] p-8 md:p-10 lg:p-12">
                 {index < phases.length - 1 ? (
-                  <span className={`absolute top-0 hidden h-full w-px bg-border-light lg:block ${isAr ? "left-0" : "right-0"}`} />
+                  <>
+                    <span className="absolute bottom-0 left-0 h-px w-full bg-border-light lg:hidden" />
+                    <span className={`absolute top-0 hidden h-full w-px bg-border-light lg:block ${isAr ? "left-0" : "right-0"}`} />
+                  </>
                 ) : null}
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1e6d69]">{phase.eyebrow}</p>
                 <h3 className="mt-5 text-2xl font-black text-[#031915]">{phase.title}</h3>
@@ -457,7 +460,7 @@ function UseCasesSection({ locale }: { locale: Locale }) {
             <AnimateIn delay={idx * 100} key={useCase.title} variant="up">
             <article className="flex h-full flex-col rounded-xl border border-white/10 bg-brand-card-soft/30 p-8">
               <h3 className="text-[12px] font-black uppercase leading-5 tracking-[0.12em] text-gradient-green">{useCase.title}</h3>
-              <p className="mt-5 flex-1 text-sm font-light leading-6 text-muted-dark">{useCase.body}</p>
+              <p className="mt-5 flex-1 text-sm font-light leading-6 text-white">{useCase.body}</p>
               <a className="mt-7 inline-flex border-t border-white/10 pt-5 text-xs font-semibold text-gradient-green transition-opacity hover:opacity-75" href={`/use-cases?category=${useCaseSlugs[idx]}#use-case-filter`}>
                 {section.link} {arrow(locale)}
               </a>

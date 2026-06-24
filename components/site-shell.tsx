@@ -13,7 +13,7 @@ const shellContent = {
       ["AI Academy", "/ai-academy"]
     ],
     bookCall: "Book a call",
-    footerBody: "AI Adopter assists enterprises in implementing AI solutions.",
+    footerBody: "Helping Enterprises Implement AI Solutions.",
     columns: [
       ["Company", "Home", "Services", "Products", "Use Cases"],
       ["Explore", "AI Academy", "AI Assessment", "Contact"],

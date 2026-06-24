@@ -220,10 +220,10 @@ export function UseCasesPage() {
               return (
                 <button
                   aria-selected={isActive}
-                  className={`shrink-0 rounded-full border px-4 py-2 text-xs font-black transition ${
+                  className={`shrink-0 cursor-pointer rounded-full border px-4 py-2 text-xs font-black transition active:scale-95 ${
                     isActive
                       ? "border-[#031915] bg-[#031915] text-white shadow-[0_8px_20px_rgba(0,31,24,0.12)]"
-                      : "border-border-light bg-white text-[#55665f] hover:border-[#0d8d6b] hover:text-[#031915]"
+                      : "border-border-light bg-white text-[#55665f] hover:border-[#0d8d6b] hover:bg-[#f0f5f3] hover:text-[#031915]"
                   }`}
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
