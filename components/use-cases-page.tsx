@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Button, Container, Label } from "@/components/ui";
 import { AnimateIn } from "@/components/animate-in";
+import { usePersistentLocale } from "@/components/use-persistent-locale";
 import watermarkLogo from "@/assets/watermark.png.png";
 
 import alsLogo from "@/assets/casses/als.png";
@@ -39,33 +40,68 @@ import worten23Logo from "@/assets/casses/Worten-23.png";
 const useCaseCategories = [
   {
     id: "all",
-    label: "All",
-    title: "Find the use cases most relevant to your sector.",
-    body: "Each card shows the challenge, the AI workflow, and the operational result in a simple format."
+    en: {
+      label: "All",
+      title: "Find the use cases most relevant to your sector.",
+      body: "Each card shows the challenge, the AI workflow, and the operational result in a simple format."
+    },
+    ar: {
+      label: "الكل",
+      title: "ابحث عن حالات الاستخدام الأكثر ملاءمة لقطاعك المؤسسي.",
+      body: "تعرض كل بطاقة التحدي، وآلية عمل الذكاء الاصطناعي، والنتيجة التشغيلية المتوقعة ضمن قالب مبسط وسهل الاستعراض."
+    }
   },
   {
     id: "retail",
-    label: "Retail & Consumer",
-    title: "Margins are made in milliseconds.",
-    body: "Pricing, demand, and customer workflows move quickly. These patterns help retailers sense demand, personalize journeys, and automate service."
+    en: {
+      label: "Retail & Consumer",
+      title: "Margins are made in milliseconds.",
+      body: "Six implementations for retailers, brands, and consumer platforms — built to handle peak-day traffic, regulated promotions, and multi-channel inventory."
+    },
+    ar: {
+      label: "التجزئة والمستهلك",
+      title: "الهوامش الربحية تُصنع في أجزاء من الثانية.",
+      body: "ستة تطبيقات عملية مخصصة لقطاع التجزئة والعلامات التجارية والمنصات الاستهلاكية، صُممت للتعامل مع ذروة الطلب، والعروض الترويجية الخاضعة للضوابط، وإدارة المخزون عبر القنوات المتعددة."
+    }
   },
   {
     id: "healthcare",
-    label: "Healthcare & Public",
-    title: "Better triage. Faster service.",
-    body: "Clinical and public-sector teams need safer routing, clearer documentation, and faster citizen response without losing traceability."
+    en: {
+      label: "Healthcare & Public",
+      title: "Better triage. Faster service.",
+      body: "Six implementations for hospitals, payers, ministries, and municipalities — built to clinical safety standards and audited for fairness, transparency, and PDPL/GDPR compliance."
+    },
+    ar: {
+      label: "الرعاية الصحية والقطاع العام",
+      title: "رعاية أفضل. خدمة أسرع.",
+      body: "ستة تطبيقات عملية للمستشفيات وشركات التأمين والوزارات والبلديات، مصممة وفق معايير السلامة السريرية، ومدققة من حيث العدالة والشفافية، ومتوافقة مع لوائح PDPL وGDPR."
+    }
   },
   {
     id: "finance",
-    label: "Finance, Legal & Compliance",
-    title: "Audit-grade by default.",
-    body: "Finance, legal, and compliance teams need controls, review trails, and evidence that can survive internal and regulatory scrutiny."
+    en: {
+      label: "Finance, Legal & Compliance",
+      title: "Audit-grade by default.",
+      body: "Six implementations for banks, insurers, law firms, and regulators — every model documented, explainable, and rebuildable. Built to survive Basel, SAMA, DFSA, and EU AI Act scrutiny."
+    },
+    ar: {
+      label: "التمويل والقانون والامتثال",
+      title: "جاهزية فورية للتدقيق والمطابقة بشكل تلقائي.",
+      body: "ستة تطبيقات للمصارف وشركات التأمين والمكاتب القانونية والجهات التنظيمية — جميع النماذج موثّقة، وقابلة للتفسير، وقابلة لإعادة البناء. مصممة لتكون متوافقة مع متطلبات التدقيق مثل Basel وSAMA وDFSA وEU AI Act."
+    }
   },
   {
     id: "manufacturing",
-    label: "Manufacturing & Industrial",
-    title: "Ship faster. Break less.",
-    body: "Industrial teams need earlier warnings, safer operations, and better scheduling across production, maintenance, and supply chain workflows."
+    en: {
+      label: "Manufacturing & Industrial",
+      title: "Ship faster. Break less.",
+      body: "Six implementations for software companies, telcos, energy operators, and engineering-led organizations — embedding AI directly into the build, run, and operate lifecycle."
+    },
+    ar: {
+      label: "التصنيع والصناعة",
+      title: "إنتاج أسرع. وأعطال أقل.",
+      body: "ستة تطبيقات عملية للمصانع والمشغلين الصناعيين وشركات الطاقة والمؤسسات الهندسية — تدمج الذكاء الاصطناعي مباشرةً في دورة التصميم والتشغيل والتحسين المستمر للعمليات."
+    }
   }
 ] as const;
 
@@ -101,35 +137,34 @@ const ICONS: Record<string, React.ReactNode> = {
 
 const useCaseCards: Array<{
   category: IndustryCategory;
-  title: string;
-  body: string;
-  tags: string[];
   icon: string;
+  en: { title: string; body: string; tags: [string, string] };
+  ar: { title: string; body: string; tags: [string, string] };
 }> = [
-  { category: "retail", title: "Demand Forecasting", body: "Inventory and demand signals are reconciled across channels.", tags: ["Retail ops", "Forecasting"], icon: "demand-forecasting" },
-  { category: "retail", title: "Recommendation Hub", body: "Pricing decisions move closer from manual changes to assisted merchandising.", tags: ["Commerce", "Personalization"], icon: "recommendation" },
-  { category: "retail", title: "Customer Copilot", body: "Support teams respond faster with context-aware answers.", tags: ["Support", "Service"], icon: "customer-copilot" },
-  { category: "retail", title: "Content Automation", body: "Teams scale consistent content for many products and channels.", tags: ["Content", "Marketing"], icon: "content" },
-  { category: "retail", title: "In-store Computer Vision", body: "Operations teams react faster when shelves and queues need attention.", tags: ["Vision", "Store execution"], icon: "computer-vision" },
-  { category: "retail", title: "Loyalty Segmentation", body: "Customer segments power campaigns that are more targeted and timely.", tags: ["CRM", "Retention"], icon: "loyalty" },
-  { category: "healthcare", title: "Clinical Triage", body: "Teams route cases and prioritize next steps with clear reasoning.", tags: ["Clinical routing", "Workflow"], icon: "clinical-triage" },
-  { category: "healthcare", title: "Medical Imaging", body: "Clinicians review assisted support for high-volume imaging workflows.", tags: ["Imaging", "Decision support"], icon: "medical-imaging" },
-  { category: "healthcare", title: "Citizen Services Copilot", body: "Citizens receive consistent access to public services and regulations.", tags: ["Public service", "Assistant"], icon: "citizen-services" },
-  { category: "healthcare", title: "Population Health Analytics", body: "Health leaders investigate cross-program and community patterns.", tags: ["Population health", "Planning"], icon: "population-health" },
-  { category: "healthcare", title: "Document Intelligence", body: "Teams extract records, claims, and service evidence from documents.", tags: ["Automation", "Processing"], icon: "document-intel" },
-  { category: "healthcare", title: "Public Sector Forecasting", body: "Public teams model demand for infrastructure, services, and operational plans.", tags: ["Civic demand", "Forecasting"], icon: "public-forecasting" },
-  { category: "finance", title: "Fraud and AML Detection", body: "Suspicious patterns are easier to catch and escalate.", tags: ["AML / KYC", "Detection"], icon: "fraud-aml" },
-  { category: "finance", title: "Credit Risk Intelligence", body: "Risk teams track changes in borrower and portfolio signals.", tags: ["Credit risk", "Risk review"], icon: "credit-risk" },
-  { category: "finance", title: "Contract Review", body: "Legal teams identify clauses and obligations faster.", tags: ["Legal", "Contract ops"], icon: "contract-review" },
-  { category: "finance", title: "Regulatory Reporting", body: "Reporting requires fewer manual steps and clearer audit trails.", tags: ["Compliance", "Audit ready"], icon: "regulatory" },
-  { category: "finance", title: "KYC Copilot", body: "Onboarding teams search, validate, and summarize customer records.", tags: ["Onboarding", "Review"], icon: "kyc" },
-  { category: "finance", title: "Compliance Surveillance", body: "Teams monitor activity and communications for reviewable patterns.", tags: ["Surveillance", "Controls"], icon: "compliance" },
-  { category: "manufacturing", title: "Predictive Maintenance", body: "Equipment failures are anticipated and crews are prepared downstream.", tags: ["Asset health", "Operations"], icon: "predictive-maintenance" },
-  { category: "manufacturing", title: "Visual Quality Inspection", body: "Manual inspection is faster, more consistent, and easier to review.", tags: ["Quality", "Vision"], icon: "visual-inspection" },
-  { category: "manufacturing", title: "Production Scheduling", body: "Schedule optimization improves coordination across teams.", tags: ["Scheduling", "Throughput"], icon: "production-scheduling" },
-  { category: "manufacturing", title: "Supply Chain Forecasting", body: "Supply chain uncertainty creates clearer early-warning signals.", tags: ["Supply chain", "Inventory"], icon: "supply-chain" },
-  { category: "manufacturing", title: "Energy & Process Optimization", body: "Energy and process inefficiencies are easier to quantify in real time.", tags: ["Sustainability", "OEE"], icon: "energy" },
-  { category: "manufacturing", title: "Worker Safety Monitoring", body: "Safety risks are easier to detect before incidents occur.", tags: ["Safety", "Compliance"], icon: "worker-safety" },
+  { category: "retail", icon: "demand-forecasting", en: { title: "Demand Forecasting", body: "Inventory and demand signals are scattered across channels.", tags: ["Inventory", "Planning"] }, ar: { title: "التنبؤ بالطلب", body: "إشارات الطلب والمخزون موزعة عبر قنوات متعددة.", tags: ["المخزون", "التخطيط"] } },
+  { category: "retail", icon: "recommendation", en: { title: "Dynamic Pricing", body: "Pricing decisions move slower than market changes.", tags: ["Pricing", "Revenue"] }, ar: { title: "التسعير الديناميكي", body: "قرارات التسعير أبطأ من وتيرة تغيرات السوق.", tags: ["التسعير", "الإيرادات"] } },
+  { category: "retail", icon: "customer-copilot", en: { title: "Customer Copilot", body: "Support teams repeat the same answers across channels.", tags: ["Customer Care", "Response Time"] }, ar: { title: "مساعد العملاء الذكي", body: "تكرر فرق الدعم الإجابات نفسها عبر القنوات المختلفة.", tags: ["العملاء", "سرعة الاستجابة"] } },
+  { category: "retail", icon: "content", en: { title: "Content Automation", body: "Teams need consistent content for many products and channels.", tags: ["Content", "Production Speed"] }, ar: { title: "أتمتة المحتوى", body: "تحتاج الفرق إلى محتوى متسق عبر عدد كبير من المنتجات والقنوات.", tags: ["المحتوى", "سرعة الإنتاج"] } },
+  { category: "retail", icon: "computer-vision", en: { title: "In-store Computer Vision", body: "Operations teams need better visibility into shelves and stores.", tags: ["Store Ops", "Loss Prevention"] }, ar: { title: "الرؤية الحاسوبية داخل المتاجر", body: "تحتاج فرق العمليات إلى رؤية أوضح لحالة الأرفف والمتاجر.", tags: ["عمليات المتاجر", "منع الخسائر وسرقة المخزون"] } },
+  { category: "retail", icon: "loyalty", en: { title: "Loyalty Segmentation", body: "Customers receive generic campaigns that do not match behaviour.", tags: ["Retention", "Engagement"] }, ar: { title: "تقسيم العملاء وبرامج الولاء", body: "يتلقى العملاء حملات عامة لا تعكس سلوكهم الفعلي.", tags: ["استبقاء العملاء", "تعزيز التفاعل"] } },
+  { category: "healthcare", icon: "clinical-triage", en: { title: "Clinical Triage", body: "Teams need safer prioritization and faster routing.", tags: ["Patient Care", "Patient Flow"] }, ar: { title: "الفرز الطبي", body: "تحتاج الفرق الطبية إلى تحديد الأولويات وتحويل الحالات بشكل أسرع وأكثر أمانًا.", tags: ["رعاية المرضى", "تدفق وحركة المرضى"] } },
+  { category: "healthcare", icon: "medical-imaging", en: { title: "Medical Imaging Support", body: "Clinical teams need decision support for high-volume imaging workflows.", tags: ["Radiology", "Review Speed"] }, ar: { title: "دعم تحليل الأشعة والصور الطبية", body: "تحتاج الفرق الطبية إلى أدوات دعم لاتخاذ القرار في بيئات التصوير ذات الأحجام الكبيرة.", tags: ["الأشعة", "سرعة المراجعة والتشخيص"] } },
+  { category: "healthcare", icon: "citizen-services", en: { title: "Citizen Services Copilot", body: "Citizens need answers across complex services and regulations.", tags: ["Public Service", "Service Access"] }, ar: { title: "مساعد الخدمات الحكومية", body: "يحتاج المواطنون إلى إجابات واضحة حول الخدمات والأنظمة المعقدة.", tags: ["الخدمات العامة", "الوصول إلى الخدمات"] } },
+  { category: "healthcare", icon: "population-health", en: { title: "Population Health Analytics", body: "Health leaders need insight across programs and communities.", tags: ["Population Health", "Planning"] }, ar: { title: "تحليلات صحة المجتمع", body: "يحتاج صناع القرار إلى رؤى شاملة عبر البرامج والمجتمعات المختلفة.", tags: ["صحة المجتمع", "التخطيط الاستراتيجي"] } },
+  { category: "healthcare", icon: "document-intel", en: { title: "Document Intelligence", body: "Forms and records create manual bottlenecks.", tags: ["Administration", "Processing Speed"] }, ar: { title: "الذكاء الاصطناعي للمستندات والوثائق", body: "تؤدي النماذج والسجلات إلى اختناقات تشغيلية يدوية.", tags: ["الإدارة", "سرعة معالجة المعاملات"] } },
+  { category: "healthcare", icon: "public-forecasting", en: { title: "Public Sector Forecasting", body: "Institutions need to anticipate demand, service pressure, and operational gaps.", tags: ["Service Demand", "Proactive Ops"] }, ar: { title: "التنبؤ في القطاع العام", body: "تحتاج المؤسسات إلى توقع الطلب وضغوط الخدمات والفجوات التشغيلية.", tags: ["الطلب على الخدمات", "العمليات الاستباقية"] } },
+  { category: "finance", icon: "fraud-aml", en: { title: "Fraud and AML Detection", body: "Suspicious patterns are hard to catch manually.", tags: ["AML / KYC", "Detection"] }, ar: { title: "كشف الاحتيال ومكافحة غسل الأموال", body: "يصعب اكتشاف الأنماط المشبوهة يدويًا.", tags: ["مكافحة غسل الأموال / اعرف عميلك", "الرصد الذكي"] } },
+  { category: "finance", icon: "credit-risk", en: { title: "Credit Risk Intelligence", body: "Risk teams need better views of borrower behaviour and financial signals.", tags: ["Credit Risk", "Risk Review"] }, ar: { title: "ذكاء مخاطر الائتمان", body: "تحتاج فرق المخاطر إلى رؤية أعمق لسلوك المقترضين والمؤشرات المالية.", tags: ["مخاطر الائتمان", "مراجعة وتقييم المخاطر"] } },
+  { category: "finance", icon: "contract-review", en: { title: "Contract Review", body: "Legal review is slow and repetitive.", tags: ["Legal", "Workflow Speed"] }, ar: { title: "مراجعة العقود", body: "تستغرق المراجعات القانونية وقتًا طويلًا وتتضمن أعمالًا متكررة.", tags: ["الشؤون القانونية", "سرعة مسار العمل"] } },
+  { category: "finance", icon: "regulatory", en: { title: "Regulatory Reporting", body: "Reporting requires multiple data and document sources.", tags: ["Compliance", "Audit-Ready"] }, ar: { title: "التقارير التنظيمية", body: "يتطلب إعداد التقارير الاعتماد على مصادر بيانات ومستندات متعددة.", tags: ["الامتثال", "الجاهزية للتدقيق الرقابي"] } },
+  { category: "finance", icon: "kyc", en: { title: "KYC Copilot", body: "Onboarding teams need to review identity, documents, and risk signals.", tags: ["Onboarding", "Review Speed"] }, ar: { title: "مساعد اعرف عميلك (KYC)", body: "تحتاج فرق تسجيل العملاء إلى مراجعة الهوية والمستندات ومؤشرات المخاطر.", tags: ["تسجيل وتأهيل العملاء", "سرعة المراجعة"] } },
+  { category: "finance", icon: "compliance", en: { title: "Compliance Surveillance", body: "Teams need to identify risky communication and transaction patterns.", tags: ["Surveillance", "Escalation"] }, ar: { title: "مراقبة الامتثال", body: "تحتاج الفرق إلى اكتشاف أنماط الاتصال والمعاملات عالية المخاطر.", tags: ["الرقابة والمتابعة", "التصعيد والمتابعة"] } },
+  { category: "manufacturing", icon: "predictive-maintenance", en: { title: "Predictive Maintenance", body: "Equipment failures are unpredictable and cause unplanned downtime.", tags: ["Asset Health", "Downtime"] }, ar: { title: "الصيانة التنبؤية", body: "أعطال المعدات غير متوقعة وتؤدي إلى توقفات تشغيلية غير مخططة.", tags: ["سلامة الأصول والآلات", "تقليل وقت التوقف"] } },
+  { category: "manufacturing", icon: "visual-inspection", en: { title: "Visual Quality Inspection", body: "Manual inspection is slow, inconsistent, and hard to scale.", tags: ["Quality", "Defect Detection"] }, ar: { title: "الفحص البصري للجودة", body: "عمليات الفحص اليدوي بطيئة وغير متسقة ويصعب توسيع نطاقها.", tags: ["الجودة", "رصد العيوب المصنعية"] } },
+  { category: "manufacturing", icon: "production-scheduling", en: { title: "Production Scheduling", body: "Schedule optimization requires coordinating many competing constraints.", tags: ["Planning", "Throughput"] }, ar: { title: "جدولة الإنتاج", body: "يتطلب تحسين الجداول التنسيق بين العديد من القيود والمتغيرات.", tags: ["التخطيط", "حجم الإنتاجية الكلية"] } },
+  { category: "manufacturing", icon: "supply-chain", en: { title: "Supply Chain Forecasting", body: "Supply chain variability creates excess stock or shortages.", tags: ["Supply Chain", "Inventory"] }, ar: { title: "التنبؤ بسلسلة الإمداد", body: "تؤدي تقلبات سلسلة الإمداد إلى فائض أو نقص في المخزون.", tags: ["سلاسل الإمداد", "المخزون"] } },
+  { category: "manufacturing", icon: "energy", en: { title: "Energy & Process Optimization", body: "Energy and process inefficiencies are hard to identify in real time.", tags: ["Sustainability", "OEE"] }, ar: { title: "تحسين الطاقة والعمليات", body: "يصعب تحديد الهدر التشغيلي واستهلاك الطاقة غير الفعّال في الوقت الفعلي.", tags: ["الاستدامة", "الفعالية الإجمالية للمعدات (OEE)"] } },
+  { category: "manufacturing", icon: "worker-safety", en: { title: "Worker Safety Monitoring", body: "Safety risks are hard to detect before incidents occur.", tags: ["EHS", "Compliance"] }, ar: { title: "مراقبة سلامة العاملين", body: "يصعب اكتشاف مخاطر السلامة قبل وقوع الحوادث.", tags: ["البيئة والصحة والسلامة (EHS)", "الامتثال"] } },
 ];
 
 // Logos ordered by category group; sliced by LOGO_SLICES per active filter.
@@ -149,12 +184,47 @@ const LOGO_SLICES: Record<UseCaseCategory, [number, number]> = {
   manufacturing: [21, 29],
 };
 
-function arrow() {
-  return "\u2192";
-}
+const pageCopy = {
+  en: {
+    heroLabel: "Use cases",
+    heroTitleBefore: "Enterprise AI patterns, organized by ",
+    heroTitleAccent: "business problem.",
+    heroBody: "Explore practical AI patterns across retail, healthcare, finance, public sector, technology, and engineering teams.",
+    browse: "Browse use cases",
+    discuss: "Discuss your use case",
+    libraryLabel: "Use-case library",
+    enterpriseLabel: "Enterprise environments",
+    operationalLabel: "Operational contexts",
+    enterpriseTitle: "Designed for real operational contexts.",
+    operationalTitle: "Built for the tools teams already use.",
+    ctaTitle: "Have a use case in mind?",
+    ctaBody: "Share the problem, data sources, and target workflow. Adopters can map it to the right service or product path.",
+    ctaDiscuss: "Discuss use case",
+    ctaProducts: "View products"
+  },
+  ar: {
+    heroLabel: "حالات الاستخدام",
+    heroTitleBefore: "أنماط تطبيقات الذكاء الاصطناعي المؤسسية، منظمة وفقًا ",
+    heroTitleAccent: "لتحديات واحتياجات الأعمال.",
+    heroBody: "استكشف تطبيقات عملية للذكاء الاصطناعي عبر قطاعات التجزئة، والرعاية الصحية، والتمويل، والقطاع العام، والتكنولوجيا، والهندسة.",
+    browse: "استكشف حالات الاستخدام",
+    discuss: "ناقش حالة الاستخدام الخاصة بك",
+    libraryLabel: "حالات الاستخدام",
+    enterpriseLabel: "بيئات المؤسسات",
+    operationalLabel: "سياقات تشغيلية",
+    enterpriseTitle: "مصمم ليتناسب مع البيئات التشغيلية الحقيقية.",
+    operationalTitle: "مصمم للعمل مع الأدوات التي تعتمدها الفرق بالفعل.",
+    ctaTitle: "هل لديك حالة استخدام محددة؟",
+    ctaBody: "شارك المشكلة ومصادر البيانات وسير العمل المستهدف، وسيساعدك فريق Adopters في تحديد الخدمة أو المنتج الأنسب لاحتياجاتك.",
+    ctaDiscuss: "ناقش حالة الاستخدام",
+    ctaProducts: "عرض المنتجات"
+  }
+} as const;
 
 export function UseCasesPage() {
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = usePersistentLocale();
+  const isAr = locale === "ar";
+  const content = pageCopy[locale];
   const [activeCategory, setActiveCategory] = useState<UseCaseCategory>("all");
 
   useEffect(() => {
@@ -167,6 +237,7 @@ export function UseCasesPage() {
   }, []);
 
   const activeMeta = useCaseCategories.find((category) => category.id === activeCategory) ?? useCaseCategories[0];
+  const activeCopy = activeMeta[locale];
   const visibleCards = useMemo(
     () => (activeCategory === "all" ? useCaseCards : useCaseCards.filter((useCase) => useCase.category === activeCategory)),
     [activeCategory]
@@ -177,24 +248,30 @@ export function UseCasesPage() {
   }, [activeCategory]);
 
   return (
-    <main className="min-h-screen bg-paper">
-      <SiteHeader active="Use Cases" allowArabic={false} locale={locale} setLocale={setLocale} />
+    <main className="min-h-screen bg-paper" dir={isAr ? "rtl" : "ltr"} lang={locale}>
+      <SiteHeader active="Use Cases" locale={locale} setLocale={setLocale} />
 
       <section className="hero-grid relative overflow-hidden text-white">
-        <img alt="" aria-hidden="true" className="pointer-events-none absolute right-0 top-0 w-[52%] max-w-[800px] select-none opacity-[0.38]" src={watermarkLogo.src} />
-        <Container className="relative z-10 flex min-h-[460px] items-center py-20 lg:py-24">
+        <img
+          alt=""
+          aria-hidden="true"
+          className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
+          src={watermarkLogo.src}
+        />
+        <Container className={`relative z-10 flex min-h-[460px] items-center py-20 lg:py-24 ${isAr ? "text-right" : ""}`}>
           <div className="max-w-[650px]">
-            <Label dark>Use cases</Label>
+            <Label dark>{content.heroLabel}</Label>
             <h1 className="mt-5 text-5xl font-black leading-[1.02] md:text-[60px]">
-              Enterprise AI patterns, organized by <span className="text-gradient-green">business problem.</span>
+              {content.heroTitleBefore}
+              <span className="text-gradient-green">{content.heroTitleAccent}</span>
             </h1>
-            <p className="mt-7 max-w-[590px] text-lg leading-8 text-muted-dark">
-              Explore practical AI patterns across retail, healthcare, finance, public sector, technology, and engineering teams.
-            </p>
+            <p className="mt-7 max-w-[590px] text-lg leading-8 text-muted-dark">{content.heroBody}</p>
             <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-              <Button href="#use-case-filter">Browse use cases {arrow()}</Button>
+              <Button href="#use-case-filter">
+                {content.browse} {isAr ? "←" : "→"}
+              </Button>
               <Button href="/contact" variant="outline">
-                Discuss your use case
+                {content.discuss}
               </Button>
             </div>
           </div>
@@ -202,15 +279,15 @@ export function UseCasesPage() {
       </section>
 
       <section className="bg-paper py-24 text-[#031915] md:py-[118px]" id="use-case-filter">
-        <Container>
+        <Container className={isAr ? "text-right" : ""}>
           <div className="grid items-end gap-12 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
-              <Label>Use-case library</Label>
+              <Label>{content.libraryLabel}</Label>
               <h2 className="mt-4 text-4xl font-black leading-[1.02] md:text-5xl">
-                {activeMeta.title}
+                {activeCopy.title}
               </h2>
             </div>
-            <p className="max-w-[480px] text-base leading-7 text-muted-light">{activeMeta.body}</p>
+            <p className="max-w-[480px] text-base leading-7 text-muted-light">{activeCopy.body}</p>
           </div>
 
           <div className="mt-10 flex gap-2 overflow-x-auto pb-2 md:flex-wrap md:overflow-visible md:pb-0" role="tablist" aria-label="Use case categories">
@@ -230,49 +307,52 @@ export function UseCasesPage() {
                   role="tab"
                   type="button"
                 >
-                  {category.label}
+                  {category[locale].label}
                 </button>
               );
             })}
           </div>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {visibleCards.map((useCase, index) => (
-              <AnimateIn delay={(index % 3) * 100} key={`${useCase.category}-${useCase.title}`} variant="up">
-              <article
-                className="relative flex min-h-[265px] flex-col items-start rounded-[8px] border border-[#dde4e1] bg-white pb-[22px] pl-10 pr-7 pt-8 shadow-[0_18px_44px_0_rgba(3,25,21,0.08)]"
-              >
-                <span className="pointer-events-none absolute left-[1px] top-[1px] h-[calc(100%-2px)] w-[6px] rounded-[8px_0_0_8px] bg-[#1e7770]" />
-                <div className="flex items-center gap-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[rgba(30,119,112,0.12)] text-lg text-[#1e7770]">
-                    {ICONS[useCase.icon] ?? null}
-                  </span>
-                  <h3 className="text-[18px] font-black leading-[1.15] text-[#031915]">{useCase.title}</h3>
-                </div>
-                <p className="mt-5 text-sm leading-6 text-[#4a5c57]">{useCase.body}</p>
-                <div className="mt-auto pt-5 flex flex-wrap gap-2">
-                  {useCase.tags.map((tag, i) => (
-                    <span
-                      className={`rounded-full border px-3 py-1.5 text-[11px] font-bold ${
-                        i === 0
-                          ? "border-transparent bg-[rgba(30,119,112,0.12)] text-[#1e7770]"
-                          : "border-[#dde4e1] bg-white text-[#4a5c57]"
-                      }`}
-                      key={tag}
-                    >
-                      {tag}
+            {visibleCards.map((useCase, index) => {
+              const cardCopy = useCase[locale];
+              return (
+                <AnimateIn delay={(index % 3) * 100} key={`${useCase.category}-${cardCopy.title}`} variant="up">
+                <article
+                  className={`relative flex h-full min-h-[265px] flex-col items-start rounded-[8px] border border-[#dde4e1] bg-white pb-[22px] pt-8 shadow-[0_18px_44px_0_rgba(3,25,21,0.08)] ${isAr ? "pe-10 ps-7 text-right" : "ps-10 pe-7"}`}
+                >
+                  <span className={`pointer-events-none absolute top-[1px] h-[calc(100%-2px)] w-[6px] ${isAr ? "right-[1px] rounded-[0_8px_8px_0]" : "left-[1px] rounded-[8px_0_0_8px]"} bg-[#1e7770]`} />
+                  <div className="flex items-center gap-4">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[rgba(30,119,112,0.12)] text-lg text-[#1e7770]">
+                      {ICONS[useCase.icon] ?? null}
                     </span>
-                  ))}
-                </div>
-              </article>
-              </AnimateIn>
-            ))}
+                    <h3 className="text-[18px] font-black leading-[1.15] text-[#031915]">{cardCopy.title}</h3>
+                  </div>
+                  <p className="mt-5 text-sm leading-6 text-[#4a5c57]">{cardCopy.body}</p>
+                  <div className="mt-auto flex flex-wrap gap-2 pt-5">
+                    {cardCopy.tags.map((tag, i) => (
+                      <span
+                        className={`rounded-full border px-3 py-1.5 text-[11px] font-bold ${
+                          i === 0
+                            ? "border-transparent bg-[rgba(30,119,112,0.12)] text-[#1e7770]"
+                            : "border-[#dde4e1] bg-white text-[#4a5c57]"
+                        }`}
+                        key={tag}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+                </AnimateIn>
+              );
+            })}
           </div>
 
           <div className="mt-14">
-            <Label>{activeCategory === "all" ? "Enterprise environments" : "Operational contexts"}</Label>
+            <Label>{activeCategory === "all" ? content.enterpriseLabel : content.operationalLabel}</Label>
             <h3 className="mt-4 max-w-[520px] text-3xl font-black leading-[1.1]">
-              {activeCategory === "all" ? "Designed for real operational contexts." : "Built for the tools teams already use."}
+              {activeCategory === "all" ? content.enterpriseTitle : content.operationalTitle}
             </h3>
             <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
               {visibleLogos.map((logo) => (
@@ -289,18 +369,16 @@ export function UseCasesPage() {
         <Container>
           <div className="overflow-hidden rounded-2xl bg-[linear-gradient(100deg,#52f35f_0%,#46ef93_58%,#55efbd_100%)] p-8 text-[#031915] md:p-14">
             <div className="grid gap-8 md:grid-cols-[1fr_345px] md:items-center">
-              <div>
-                <h2 className="text-4xl font-black md:text-5xl">Have a use case in mind?</h2>
-                <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429]/80">
-                  Share the workflow, business constraint, or sector problem. Adopters can map it to a practical AI path.
-                </p>
+              <div className={isAr ? "text-right" : ""}>
+                <h2 className="text-4xl font-black md:text-5xl">{content.ctaTitle}</h2>
+                <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429]/80">{content.ctaBody}</p>
               </div>
               <div className="grid gap-3">
                 <Button className="w-full !text-white" href="/contact" variant="dark">
-                  Discuss your use case {arrow()}
+                  {content.ctaDiscuss} {isAr ? "←" : "→"}
                 </Button>
                 <Button className="w-full" href="/products" variant="light">
-                  View products
+                  {content.ctaProducts}
                 </Button>
               </div>
             </div>
@@ -308,7 +386,7 @@ export function UseCasesPage() {
         </Container>
       </section>
 
-      <SiteFooter allowArabic={false} locale={locale} />
+      <SiteFooter locale={locale} />
     </main>
   );
 }
