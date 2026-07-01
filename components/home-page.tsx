@@ -5,12 +5,12 @@ import claudeLogo from "@/assets/claude2.png";
 import googleLogo from "@/assets/ImageWithFallback-2.png";
 import openAiLogo from "@/assets/openai-logo.png";
 import microsoftLogo from "@/assets/microsoft2.png";
-import consoleMockup from "@/assets/ProductMockup.png";
 import watermarkLogo from "@/assets/watermark.png.png";
-import { useState } from "react";
+import Link from "next/link";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
 import { Button, Container, Label, SectionHeader } from "@/components/ui";
 import { AnimateIn } from "@/components/animate-in";
+import { usePersistentLocale } from "@/components/use-persistent-locale";
 
 const copy = {
   en: {
@@ -131,114 +131,114 @@ const copy = {
     dir: "rtl",
     hero: {
       eyebrow: "مكامل أنظمة الذكاء الاصطناعي للمؤسسات",
-      title: ["المعتمد الذكي", "يساعد المؤسسات في تنفيذ حلول", "الذكاء الاصطناعي."],
+      title: ["نُمكّن", "المؤسسات من تبني وتفعيل", "حلول الذكاء الاصطناعي."],
       body:
-        "تساعد Adopters المؤسسات على الانتقال من أفكار الذكاء الاصطناعي إلى وكلاء يعملون في الإنتاج، ومنصات ذكاء، ونماذج مراقبة، ونتائج أعمال قابلة للقياس.",
-      primary: "احجز مكالمة",
-      secondary: "ابدأ تقييم 60 ثانية"
+        "تساعد Adopters المؤسسات على الانتقال من أفكار الذكاء الاصطناعي إلى وكلاء مُفعّلين، ومنصات ذكاء، ونماذج مراقبة، ونتائج أعمال قابلة للقياس.",
+      primary: "احجز موعد اتصال",
+      secondary: "ابدأ التقييم (خلال 60 ثانية)"
     },
     lifecycle: {
-      label: "دورة حياة الإنتاج",
+      label: "دورة الإنتاج",
       title: "مسار واضح من الاستراتيجية إلى تشغيل الذكاء الاصطناعي.",
       body:
-        "تعمل Adopters عبر دورة الحياة الكاملة: الاكتشاف، وتصميم التجربة، والهندسة، والنشر، والمراقبة، والتحسين المستمر.",
+        "تعمل Adopters عبر دورة كاملة: الاكتشاف، تصميم التجربة، الهندسة، النشر، المراقبة، والتحسين المستمر.",
       phases: [
         {
           eyebrow: "المرحلة 01 · الاستراتيجية",
-          title: "حدد الطموح",
-          body: "تقييم جاهزية الذكاء الاصطناعي، وخارطة طريق الاستثمار، والحوكمة والخصوصية، وتصميم مركز التميز.",
+          title: "تحديد الطموح",
+          body: "تقييم جاهزية الذكاء الاصطناعي، مخطط الاستثمار، الحوكمة والخصوصية، تصميم مركز التميز.",
           number: "01"
         },
         {
           eyebrow: "المرحلة 02 · البناء",
-          title: "أدخل الذكاء الاصطناعي في الإنتاج",
-          body: "إثبات المفهوم والتجريب على بيانات حقيقية، وتكامل الأنظمة، ومنصات البيانات، وعمليات MLOps.",
+          title: "تشغيل الذكاء الاصطناعي فعليًا",
+          body: "نماذج أولية (PoC)، تكامل الأنظمة، منصات البيانات، MLOps.",
           number: "02"
         },
         {
           eyebrow: "المرحلة 03 · التشغيل",
-          title: "حافظ على صحته",
-          body: "مراقبة AIOps، والاستجابة للحوادث، وصيانة النماذج، وتقارير الأداء التنفيذية.",
+          title: "الحفاظ على الأداء",
+          body: "مراقبة AIOps، استجابة الحوادث، صيانة النماذج، تقارير الأداء التنفيذية.",
           number: "03"
         }
       ]
     },
     services: {
       label: "الخدمات",
-      title: "ما نقدمه",
-      cta: "استكشف الخدمات",
+      title: "ماذا نقدم",
+      cta: "استكشف خدماتنا",
       cards: [
         {
           number: "01",
           type: "استراتيجية",
-          title: "استراتيجية وخارطة طريق للذكاء الاصطناعي",
-          body: "استشارات لتحديد استثمارات الذكاء الاصطناعي ومواءمتها وتخطيطها على مستوى الإدارة التنفيذية.",
-          meta: "المدة: 2-6 أسابيع"
+          title: "استراتيجية وخارطة طريق الذكاء الاصطناعي",
+          body: "استشارات تنفيذية لتحديد ومواءمة وتخطيط استثمارات الذكاء الاصطناعي.",
+          meta: "مدة المشروع: 2–6 أسابيع"
         },
         {
           number: "02",
-          type: "بناء",
-          title: "الخدمات المهنية للذكاء الاصطناعي",
-          body: "تصميم وبناء ودمج أنظمة الذكاء الاصطناعي داخل بيئات المؤسسات من البداية إلى النهاية.",
-          meta: "المدة: 8 أسابيع - 10 أشهر"
+          type: "البناء",
+          title: "الخدمات المهنية والهندسية للذكاء الاصطناعي",
+          body: "تصميم وبناء ودمج أنظمة الذكاء الاصطناعي بالكامل وتكاملها برمجياً داخل البيئات المؤسسية.",
+          meta: "مدة المشروع: من 8 أسابيع إلى 10 أشهر"
         },
         {
           number: "03",
-          type: "تشغيل",
-          title: "الخدمات المُدارة للذكاء الاصطناعي",
-          body: "عمليات مدعومة باتفاقيات مستوى الخدمة للحفاظ على أداء أنظمة الذكاء الاصطناعي بعد الإطلاق.",
-          meta: "المدة: 12-36 شهرًا"
+          type: "التشغيل",
+          title: "خدمات الذكاء الاصطناعي المدارة",
+          body: "عمليات تشغيلية مدعومة باتفاقية مستوى خدمة (SLA) تضمن استقرار استجابة وأداء أنظمة الذكاء الاصطناعي بعد الإطلاق الفعلي.",
+          meta: "مدة المشروع: من 12 إلى 36 شهراً"
         }
       ]
     },
     products: {
       label: "المنتجات",
-      title: "ذكاء Adopters وعمليات الذكاء الاصطناعي.",
+      title: "Adopters للذكاء الاصطناعي والعمليات الذكية",
       body:
-        "يحول Adopters Intelligent المعلومات المتفرقة إلى ذكاء جاهز للقرار. ويراقب Pulse النماذج المنشورة ويحافظ على موثوقية الذكاء الاصطناعي ووضوحه وحوكمته.",
+        "تحوّل Adopters Intelligent المعلومات المشتتة إلى ذكاء جاهز لاتخاذ القرار. تقوم Pulse بمراقبة النماذج وتشغيل الذكاء الاصطناعي بشكل موثوق وقابل للتفسير ومُدار.",
       name: "Adopters Intelligent",
-      status: "قيد البناء",
+      status: "قيد التطوير",
       description:
-        "ذكاء إقليمي مقدم كمنصة: محرك ذكاء اصطناعي مشترك يتم تقديمه بعلامات شركاء مختلفة في بلاد الشام والخليج.",
+        "ذكاء إقليمي يُقدّم كمنصة موحدة — محرك ذكاء واحد يتم تخصيصه وإعادة تسميته لشركاء في بلاد الشام والخليج.",
       link: "استكشف"
     },
     useCases: {
       label: "حالات الاستخدام",
-      title: "أنماط ذكاء اصطناعي مرجعية عبر قطاعات المؤسسات.",
+      title: "النماذج المرجعية لتطبيقات الذكاء الاصطناعي عبر القطاعات المؤسسية",
       body:
-        "تحزم Adopters أنماط تنفيذ الذكاء الاصطناعي المتكررة في حلول عملية لفرق التجزئة، والرعاية الصحية، والقطاع العام، والتمويل، والقانون، والامتثال، والتقنية، والهندسة.",
+        "تقوم Adopters بجمع وصياغة نماذج تنفيذ الذكاء الاصطناعي المتكررة في صورة حلول عملية مخصصة لفرق التجزئة، والرعاية الصحية، والقطاع العام، والمالية، والقانون، والامتثال، والتقنية، والهندسة.",
       link: "حالات الاستخدام",
       cards: [
         {
-          title: "التجزئة والمستهلك",
-          body: "إدارة الشكاوى، ذكاء الطلب والمخزون، رؤى التجزئة الحوارية، ودعم ما بعد البيع."
+          title: "قطاع التجزئة والسلع الاستهلاكية",
+          body: "إدارة الشكاوى والبلاغات، استخبارات ومؤشرات الطلب والمخزون، الرؤى الحوارية لقطاع البيع، خدمات دعم ما بعد البيع."
         },
         {
-          title: "الرعاية الصحية والقطاع العام",
-          body: "مساعدو خدمات المستشفيات، الترميز الطبي، دعم المواطنين، ومعالجة استفسارات الحكومة الإلكترونية."
+          title: "الرعاية الصحية والقطاع الحكومي",
+          body: "مساعدو الخدمات الطبية بالمستشفيات، الترميز الطبي الذكي، دعم شؤون المواطنين، معالجة الاستفسارات والمعاملات في الحكومة الإلكترونية."
         },
         {
-          title: "التمويل والقانون والامتثال",
-          body: "أتمتة AML / KYC، امتثال العقود، ومعالجة الفواتير والمستندات مع قابلية تتبع كاملة."
+          title: "المالية، الشؤون القانونية والامتثال",
+          body: "أتمتة إجراءات مكافحة غسل الأموال (AML) ومعرفة العميل (KYC)، امتثال العقود والاتفاقيات، معالجة الفواتير والمستندات مع ميزة التتبع والتدقيق الكامل."
         },
         {
-          title: "التصنيع والصناعة",
-          body: "الصيانة التنبؤية، فحص الجودة البصري، جدولة الإنتاج، توقعات سلسلة الإمداد، ومراقبة سلامة العمال."
+          title: "التصنيع والقطاع الصناعي",
+          body: "الصيانة التنبؤية، الفحص البصري الذكي لجودة الإنتاج، جدولة العمليات الإنتاجية، التنبؤ بمسارات سلاسل الإمداد، والمراقبة الذكية لسلامة العاملين."
         }
       ]
     },
     technology: {
-      label: "النظام التقني",
-      title: "مبني حول الذكاء الاصطناعي الحديث وبنى السحابة.",
+      label: "النظام البيئي التكنولوجي",
+      title: "مبني على تقنيات الذكاء الاصطناعي الحديثة وتقنيات الحوسبة السحابية.",
       body:
-        "تصمم Adopters حلولًا يمكن أن تعمل عبر مقدمي النماذج الرائدين، وبنية السحابة، وبيئات التكنولوجيا المؤسسية."
+        "تصمم Adopters حلولاً مرنة قادرة على التكامل والعمل بكفاءة عبر مختلف مزودي النماذج الرائدين، والبنى التحتية السحابية، والبيئات التقنية للمؤسسات"
     },
     cta: {
-      title: "لست متأكدًا من أين تبدأ؟",
+      title: "لست متأكداً من أين تبدأ؟",
       body:
-        "أجب عن أربعة أسئلة واحصل على مسار ذكاء اصطناعي مقترح: استراتيجية، بناء، تشغيل، Adopters Intelligent، أو Pulse.",
-      primary: "ابدأ التقييم",
-      secondary: "احجز مكالمة"
+        "أجب عن أربعة أسئلة سريعة لترشيح مسار الذكاء الاصطناعي الأنسب لوضعك الحالي: الإستراتيجية، البناء، التشغيل، Adopters Intelligent، أو Pulse.",
+      primary: "ابدأ التقييم الآن",
+      secondary: "احجز موعد اتصال"
     }
   }
 } as const;
@@ -255,14 +255,92 @@ function arrow(locale: Locale) {
   return locale === "ar" ? "←" : "→";
 }
 
-function HeroMockup({ locale }: { locale: Locale }) {
-  const isAr = locale === "ar";
+function HeroNode({ label, className }: { label: string; className?: string }) {
   return (
-    <img
-      alt="Adopters Intelligence Console"
-      className={`w-full max-w-[555px] rounded-2xl shadow-[0_28px_80px_rgba(0,0,0,0.35)] ${isAr ? "lg:order-first" : ""}`}
-      src={consoleMockup.src}
-    />
+    <div
+      className={`absolute flex h-[56px] w-[56px] items-center justify-center rounded-full bg-gradient-to-br from-[#5be45e] to-[#25d99d] text-[16px] font-extrabold text-[#031915] ${className ?? ""}`}
+    >
+      {label}
+    </div>
+  );
+}
+
+function HeroInfoRow({ text, status }: { text: string; status: string }) {
+  return (
+    <div className="flex min-h-[46px] items-center justify-between gap-3 rounded-[14px] border border-[#163a33] bg-white/[0.04] px-3 py-2 sm:gap-4 sm:px-4">
+      <p className="min-w-0 flex-1 text-[11px] leading-5 text-[#a7bdb6] sm:text-[12px]">{text}</p>
+      <p className="shrink-0 whitespace-nowrap text-[11px] font-bold text-[#25d99d] sm:text-[12px]">{status}</p>
+    </div>
+  );
+}
+
+function HeroIntelligenceCard({ locale }: { locale: Locale }) {
+  const bars = [34, 55, 44, 68, 60, 76];
+  const content = locale === "ar"
+    ? {
+        console: "تمكين المؤسسات من تنفيذ حلول الذكاء الاصطناعي",
+        confidence: "مستوى الثقة في اتخاذ القرار",
+        insight: "إشارات أولوية من البيانات العامة والداخلية",
+        briefing: "ملخص معلوماتي موثق المصادر باللغتين العربية والإنجليزية"
+      }
+    : {
+        console: "Adopters Intelligent · Intelligence Console",
+        confidence: "Decision confidence",
+        insight: "Priority insight from public + internal datasets",
+        briefing: "Arabic/English source-grounded briefing"
+      };
+
+  return (
+    <div className="w-full max-w-[554px] overflow-hidden rounded-[24px] border border-[#21463e] bg-[#071f1b] shadow-[0_32px_80px_rgba(0,0,0,0.25)]">
+      <div className="flex min-h-[46px] items-center justify-between gap-3 border-b border-[#163a33] bg-white/[0.03] px-3 py-2 sm:px-4">
+        <div className="flex shrink-0 gap-[7px]">
+          <span className="h-[10px] w-[10px] rounded-full bg-[#21463e]" />
+          <span className="h-[10px] w-[10px] rounded-full bg-[#1e6d69]" />
+          <span className="h-[10px] w-[10px] rounded-full bg-[#25d99d]" />
+        </div>
+        <p className={`min-w-0 text-end text-[9px] font-extrabold leading-4 text-[#6e867e] sm:text-[11px] ${locale === "ar" ? "" : "uppercase tracking-[1.5px]"}`}>
+          {content.console}
+        </p>
+      </div>
+
+      <div className="space-y-3 p-3 sm:space-y-[14px] sm:p-[18px]">
+        <div className="grid grid-cols-1 gap-[14px] md:grid-cols-[1.2fr_1fr]">
+          <div className="rounded-[14px] border border-[#163a33] bg-white/[0.04] p-4 sm:p-[18px]">
+            <p className="mb-1 text-[13px] font-bold leading-5 text-[#25d99d]">{content.confidence}</p>
+            <div className="mb-7 flex items-end gap-3">
+              <span className="text-[28px] font-bold leading-none tracking-[-0.84px] text-[#f4f6f5]">87%</span>
+              <span className="text-[13px] font-bold text-[#25d99d]">+18%</span>
+            </div>
+            <div className="flex h-[72px] items-end gap-2">
+              {bars.map((height, index) => (
+                <div
+                  className="hero-bar flex-1 rounded-t-[8px] bg-gradient-to-br from-[#5be45e] to-[#25d99d] opacity-90"
+                  key={index}
+                  style={{ animationDelay: `${200 + index * 120}ms`, height: `${height}%` }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="relative flex min-h-[176px] items-center justify-center rounded-[14px] border border-[#163a33] bg-white/[0.04]">
+            <div className="relative h-[150px] w-[220px]">
+              <svg className="absolute inset-0" height="150" viewBox="0 0 220 150" width="220">
+                <line className="hero-link-line" stroke="#1e6d69" strokeWidth="2" x1="36" x2="110" y1="34" y2="110" />
+                <line className="hero-link-line" stroke="#1e6d69" strokeWidth="2" style={{ animationDelay: "300ms" }} x1="110" x2="184" y1="110" y2="34" />
+              </svg>
+              <HeroNode className="left-[8px] top-[6px]" label="D" />
+              <HeroNode className="left-[82px] top-[82px]" label="AI" />
+              <HeroNode className="right-[8px] top-[6px]" label="K" />
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-[10px] rounded-[14px] border border-[#163a33] bg-white/[0.04] p-3 sm:p-[18px]">
+          <HeroInfoRow status="Ready" text={content.insight} />
+          <HeroInfoRow status="Generated" text={content.briefing} />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -272,23 +350,24 @@ function Hero({ locale }: { locale: Locale }) {
 
   return (
     <section className="hero-grid relative overflow-hidden text-white">
-      <img alt="" aria-hidden="true" className="pointer-events-none absolute right-0 top-0 w-[52%] max-w-[800px] select-none opacity-[0.38]" src={watermarkLogo.src} />
+      <img
+        alt=""
+        aria-hidden="true"
+        className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
+        src={watermarkLogo.src}
+      />
       <Container className="relative z-10 grid min-h-[830px] items-center gap-12 py-20 lg:grid-cols-[1fr_0.9fr] lg:py-24">
-        <div className={`max-w-[650px] ${isAr ? "text-right lg:order-2 lg:justify-self-end" : ""}`}>
-          <div
-            className={`inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-muted-dark ${
-              isAr ? "flex-row-reverse" : ""
-            }`}
-          >
+        <div className={`max-w-[650px] ${isAr ? "text-right" : ""}`}>
+          <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-muted-dark">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
             {home.hero.eyebrow}
           </div>
-          <h1 className="mt-7 text-balance text-5xl font-black leading-[0.96] md:text-7xl lg:text-[76px]">
+          <h1 className={`mt-7 text-balance text-5xl font-black md:text-7xl lg:text-[76px] ${isAr ? "leading-[1.25]" : "leading-[0.96]"}`}>
             <span className="text-gradient-green">{home.hero.title[0]}</span> {home.hero.title[1]}{" "}
             <span className="text-gradient-green">{home.hero.title[2]}</span>
           </h1>
-          <p className={`mt-7 max-w-[600px] text-lg leading-8 text-muted-dark ${isAr ? "mr-auto" : ""}`}>{home.hero.body}</p>
-          <div className={`mt-9 flex flex-col gap-4 sm:flex-row ${isAr ? "sm:justify-end" : ""}`}>
+          <p className="mt-7 max-w-[600px] text-lg leading-8 text-muted-dark">{home.hero.body}</p>
+          <div className="mt-9 flex flex-col gap-4 sm:flex-row">
             <Button href="/contact">
               {home.hero.primary} {arrow(locale)}
             </Button>
@@ -297,8 +376,10 @@ function Hero({ locale }: { locale: Locale }) {
             </Button>
           </div>
         </div>
-        <div className={`flex justify-center ${isAr ? "lg:order-1 lg:justify-start" : "lg:justify-end"}`}>
-          <HeroMockup locale={locale} />
+        <div className="flex min-w-0 justify-center lg:justify-end">
+          <AnimateIn className="w-full max-w-[554px]" variant="right">
+            <HeroIntelligenceCard key={locale} locale={locale} />
+          </AnimateIn>
         </div>
       </Container>
     </section>
@@ -308,7 +389,7 @@ function Hero({ locale }: { locale: Locale }) {
 function LifecycleSection({ locale }: { locale: Locale }) {
   const section = copy[locale].lifecycle;
   const isAr = locale === "ar";
-  const phases = isAr ? [...section.phases].reverse() : section.phases;
+  const phases = section.phases;
 
   return (
     <section className="bg-paper py-24 md:py-[118px]">
@@ -355,17 +436,17 @@ function ServicesSection({ locale }: { locale: Locale }) {
     <section className="bg-brand-dark py-24 text-white md:py-[118px]" id="services">
       <Container className={isAr ? "text-right" : ""}>
         <AnimateIn variant="up">
-          <div className={`flex flex-col gap-6 md:flex-row md:items-end md:justify-between ${isAr ? "md:flex-row-reverse" : ""}`}>
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <Label dark>{section.label}</Label>
               <h2 className="mt-4 text-4xl font-black md:text-5xl">{section.title}</h2>
             </div>
-            <a
+            <Link
               className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[linear-gradient(93deg,#5be45e_2.36%,#25d99d_97.64%)] px-6 text-sm font-extrabold text-brand-dark transition hover:opacity-90"
               href="/services"
             >
               {section.cta} {arrow(locale)}
-            </a>
+            </Link>
           </div>
         </AnimateIn>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -379,7 +460,7 @@ function ServicesSection({ locale }: { locale: Locale }) {
               <h3 className="mt-3 text-xl font-black">{service.title}</h3>
               <p className="mt-3 min-h-20 text-sm font-light leading-6 text-muted-light">{service.body}</p>
               <div className="mt-7 flex items-center border-t border-border-light pt-5 text-xs font-bold text-muted-light">
-                <svg aria-hidden="true" className="mr-2 shrink-0 text-[#1e6d69]" fill="none" height="13" viewBox="0 0 13 13" width="13">
+                <svg aria-hidden="true" className="me-2 shrink-0 text-[#1e6d69]" fill="none" height="13" viewBox="0 0 13 13" width="13">
                   <rect height="10.5" rx="1.5" stroke="currentColor" strokeWidth="1.2" width="11.5" x="0.75" y="1.75" />
                   <path d="M0.75 5h11.5" stroke="currentColor" strokeLinecap="round" strokeWidth="1.2" />
                   <path d="M4 0.5v2.5M9 0.5v2.5" stroke="currentColor" strokeLinecap="round" strokeWidth="1.2" />
@@ -413,7 +494,7 @@ function ProductsSection({ locale }: { locale: Locale }) {
         </AnimateIn>
         <AnimateIn delay={100} variant="up">
         <article className="mt-12 rounded-2xl border border-border-light bg-white p-8 md:p-10">
-          <div className={`flex flex-col gap-5 md:flex-row md:items-start md:justify-between ${isAr ? "md:flex-row-reverse" : ""}`}>
+          <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
             <h3 className="text-2xl text-[#031915]">
               <span className="font-black">{section.name.split(" ")[0]}</span>{" "}
               <span className="font-normal">{section.name.split(" ").slice(1).join(" ")}</span>
@@ -475,6 +556,7 @@ function UseCasesSection({ locale }: { locale: Locale }) {
 
 function TechnologySection({ locale }: { locale: Locale }) {
   const section = copy[locale].technology;
+  const isAr = locale === "ar";
 
   return (
     <section className="bg-paper py-20 md:py-[82px]">
@@ -482,7 +564,7 @@ function TechnologySection({ locale }: { locale: Locale }) {
         <AnimateIn variant="up">
           <div className="text-center">
             <Label centered>{section.label}</Label>
-            <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] lg:whitespace-nowrap lg:text-5xl">
+            <h2 className={`mt-4 text-4xl font-black leading-[1.05] text-[#031915] lg:text-5xl ${isAr ? "" : "lg:whitespace-nowrap"}`}>
               {section.title}
             </h2>
             <p className="mx-auto mt-5 max-w-[680px] text-base leading-7 text-muted-light">
@@ -513,12 +595,12 @@ function CTASection({ locale }: { locale: Locale }) {
       <Container>
         <AnimateIn variant="up">
         <div className="overflow-hidden rounded-2xl bg-[linear-gradient(90deg,#5be45e_0%,#25d99d_100%)] p-8 text-[#031915] md:p-14">
-          <div className={`grid gap-8 md:grid-cols-[1fr_345px] md:items-center ${isAr ? "md:grid-flow-col-dense" : ""}`}>
-            <div className={isAr ? "text-right md:col-start-2" : ""}>
+          <div className="grid gap-8 md:grid-cols-[1fr_345px] md:items-center">
+            <div className={isAr ? "text-right" : ""}>
               <h2 className="text-4xl font-black md:text-5xl">{section.title}</h2>
               <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429]/80">{section.body}</p>
             </div>
-            <div className={`grid gap-3 ${isAr ? "md:col-start-1" : ""}`}>
+            <div className="grid gap-3">
               <Button className="w-full !text-white" href="/assessment" variant="dark">
                 {section.primary} <span aria-hidden="true">{arrow(locale)}</span>
               </Button>
@@ -535,7 +617,7 @@ function CTASection({ locale }: { locale: Locale }) {
 }
 
 export function HomePage() {
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = usePersistentLocale();
   const current = copy[locale];
 
   return (

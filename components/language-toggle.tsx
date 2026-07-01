@@ -9,16 +9,10 @@ export function LanguageToggle({
   locale: Locale;
   onChange: (locale: Locale) => void;
 }) {
-  const options =
-    locale === "ar"
-      ? [
-          { value: "en" as const, label: "EN" },
-          { value: "ar" as const, label: "عربي" }
-        ]
-      : [
-          { value: "en" as const, label: "EN" },
-          { value: "ar" as const, label: "AR" }
-        ];
+  const options = [
+    { value: "en" as const, label: "EN" },
+    { value: "ar" as const, label: "AR" }
+  ];
 
   return (
     <div className="flex rounded-full bg-white/[0.06] p-1 text-[11px] font-black" aria-label="Language selector">

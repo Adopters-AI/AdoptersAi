@@ -30,6 +30,9 @@
   --color-border-dark: var(--border-dark);
   --color-border-light: var(--border-light);
   --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
+  --font-arabic: var(--font-almarai), Tahoma, Arial, sans-serif;
+  --font-arabic-original: var(--font-almarai-original), Tahoma, Arial, sans-serif;
+  --font-poppins: var(--font-poppins-raw), Arial, Helvetica, sans-serif;
 }
 
 @layer base {
@@ -39,6 +42,8 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
@@ -56,6 +61,27 @@
   button {
     font: inherit;
   }
+
+  [lang="ar"] {
+    font-family: var(--font-arabic);
+    font-synthesis: none;
+  }
+}
+
+[lang="ar"] .font-black,
+[lang="ar"] .font-extrabold {
+  font-weight: 700;
+}
+
+[lang="ar"] h1,
+[lang="ar"] h2,
+[lang="ar"] h3 {
+  line-height: 1.5 !important;
+}
+
+/* Keep Arabic descenders and diacritics inside flexible line boxes across browsers. */
+[lang="ar"] :where(p, a, button, li, label, input, textarea, select) {
+  line-height: 1.7;
 }
 
 .hero-grid {
@@ -109,4 +135,33 @@
 
 .page-transition {
   animation: page-enter 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes bar-grow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.hero-bar {
+  transform-origin: bottom;
+  transform: scaleY(0);
+}
+
+[data-animate][data-visible="true"] .hero-bar {
+  animation: bar-grow 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes line-flow {
+  0% { opacity: 0.25; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.25; }
+}
+
+.hero-link-line {
+  animation: line-flow 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bar, .hero-link-line { animation: none; }
+  .hero-bar { transform: none; }
 }

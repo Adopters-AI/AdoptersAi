@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import adoptersLogo from "@/assets/adopters-logo-reversed.png";
 
 type ButtonProps = {
@@ -35,12 +36,12 @@ export function Button({
   };
 
   return (
-    <a
+    <Link
       className={`inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-extrabold transition ${variants[variant]} ${className}`}
       href={href}
     >
       {children}
-    </a>
+    </Link>
   );
 }
 
