@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Inter, Poppins, IBM_Plex_Sans_Arabic, Tajawal } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import adoptersMark from "@/assets/adopters-mark.png";
@@ -16,6 +16,20 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-poppins-raw",
+  display: "swap"
+});
+
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-ibm-plex-arabic",
+  display: "swap"
+});
+
+const tajawal = Tajawal({
+  subsets: ["arabic"],
+  weight: ["300", "400", "500", "700", "800", "900"],
+  variable: "--font-tajawal",
   display: "swap"
 });
 
@@ -57,7 +71,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable} ${almaraiOriginal.variable} ${almarai.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${poppins.variable} ${almaraiOriginal.variable} ${almarai.variable} ${ibmPlexSansArabic.variable} ${tajawal.variable}`} suppressHydrationWarning>
       <body>
         <LocaleProvider>
           <PageTransition>{children}</PageTransition>
