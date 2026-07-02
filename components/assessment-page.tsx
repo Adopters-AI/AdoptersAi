@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { AnimateIn } from "@/components/animate-in";
 import { SiteFooter, SiteHeader, type Locale } from "@/components/site-shell";
+import { usePersistentLocale } from "@/components/use-persistent-locale";
 import { Container, Label } from "@/components/ui";
 import watermarkLogo from "@/assets/watermark.png.png";
 
-const steps = [
+const stepsEn = [
   {
     number: "QUESTION 1",
     title: "What industry are you in?",
@@ -53,28 +54,74 @@ const steps = [
   },
 ];
 
+const stepsAr: typeof stepsEn = [
+  {
+    number: "السؤال الأول",
+    title: "ما القطاع الذي تنتمي إليه مؤسستك؟",
+    subtitle: "يساعدنا هذا الخيار على مطابقة وتوجيه التوصية النهائية بنمط حالة الاستخدام الأكثر ملاءمة لطبيعة عملك.",
+    options: [
+      { id: "finance", title: "التمويل / القانون / الامتثال", body: "المخاطر، والامتثال، والمتطلبات التنظيمية، والعقود، ومكافحة الاحتيال." },
+      { id: "healthcare", title: "الرعاية الصحية / القطاع العام", body: "تقديم الخدمات، وفرز الحالات، وذكاء المستندات." },
+      { id: "retail", title: "التجزئة / المستهلك", body: "الطلب، والتسعير، وتجربة وتفاعل العملاء." },
+      { id: "manufacturing", title: "التصنيع / الصناعة", body: "العمليات التشغيلية، والصيانة التنبؤية، وسلاسل الإمداد، وتحسين الكفاءة." },
+    ],
+  },
+  {
+    number: "السؤال 2",
+    title: "ما التحدي الرئيسي الذي تواجهه في مجال الذكاء الاصطناعي؟",
+    subtitle: "اختر الخيار الذي يصف وضع مؤسستك الحالي بشكل أفضل.",
+    options: [
+      { id: "roadmap", title: "نحتاج إلى مخطط", body: "ندرك أهمية الذكاء الاصطناعي، لكننا بحاجة إلى رؤية واضحة وتحديد الأولويات وخطوات التنفيذ المناسبة." },
+      { id: "data", title: "بياناتنا متفرقة", body: "نحتاج إلى طبقة ذكاء موحدة تجمع المعلومات من مصادر متعددة وتربطها معًا." },
+      { id: "build", title: "نحتاج إلى البناء والتنفيذ", body: "لدينا حالة استخدام واضحة ونحتاج إلى الدعم اللازم لتطوير الحل وتنفيذه." },
+      { id: "monitoring", title: "نحتاج إلى المراقبة والتشغيل", body: "لدينا نظام ذكاء اصطناعي قيد التشغيل أو على وشك الإطلاق، ونحتاج إلى مراقبته وإدارته بشكل مستمر." },
+    ],
+  },
+  {
+    number: "السؤال 3",
+    title: "أين موقع مؤسستك حالياً في رحلة تبني الذكاء الاصطناعي؟",
+    subtitle: "يساعدنا ذلك على تحديد ما إذا كانت نقطة البداية الأنسب هي الاستراتيجية، أو البناء والتنفيذ، أو التشغيل والتحسين.",
+    options: [
+      { id: "exploring", title: "ما زلنا في مرحلة الاستكشاف", body: "ندرك أهمية الذكاء الاصطناعي، لكننا لم نبدأ بعد. نحتاج إلى استراتيجية واضحة وخارطة طريق قبل اتخاذ أي خطوات تنفيذية." },
+      { id: "plan", title: "لدينا خطة ونحتاج إلى التنفيذ", body: "تم اعتماد التوجه من قبل الإدارة، ولدينا أفكار أو حالات استخدام محددة، ونحتاج إلى خبراء ومهندسين لتحويلها إلى حلول عملية." },
+      { id: "implementing", title: "في مرحلة التنفيذ", body: "يعمل الفريق حاليًا على التحضير لبناء النظام أو دمجه ضمن الأنظمة الحالية." },
+      { id: "scaling", title: "لدينا أنظمة ذكاء اصطناعي قيد التشغيل ونرغب في التوسع", body: "تم تشغيل الحلول بالفعل، ونحتاج إلى المراقبة والحوكمة والتحسين المستمر لضمان الأداء والاستدامة." },
+    ],
+  },
+  {
+    number: "السؤال 4",
+    title: "ما هو حجم المؤسسة الأكثر توافقاً مع وضعك الحالي؟",
+    subtitle: "يتغير نموذج تقديم الخدمات والحلول المقترح بناءً على حجم فريق عملك ومستوى التعقيد التشغيلي.",
+    options: [
+      { id: "small", title: "فريق صغير", body: "فريق محدود الحجم يبحث عن توجيه عملي أو مشروع تجريبي (Pilot) لإثبات القيمة." },
+      { id: "midsize", title: "مؤسسة متوسطة الحجم", body: "تضم عدة فرق وأنظمة وأصحاب مصلحة يحتاجون إلى تنسيق وتعاون مستمر." },
+      { id: "enterprise", title: "مؤسسة كبيرة", body: "بيئات عمل أكثر تعقيدًا، تضم أنظمة متعددة ومتطلبات تشغيلية وفرقًا عابرة للإدارات." },
+      { id: "regulated", title: "مؤسسة خاضعة لتنظيمات ورقابة عالية", body: "تحتاج إلى مستويات متقدمة من الحوكمة والأمن والتدقيق أو متطلبات نشر سيادية للبيانات." },
+    ],
+  },
+];
+
 // ─── Result definitions derived from actual website content ───────────────────
 
 type ResultKey = "strategy" | "build" | "operate" | "intelligent";
 
-const results: Record<
-  ResultKey,
-  {
-    label: string;
-    title: string;
-    tagline: string;
-    body: string;
-    readinessPct: number;
-    nextSteps: string[];
-    primaryCTA: { label: string; href: string };
-    secondaryCTA: { label: string; href: string };
-  }
-> = {
+type ResultDef = {
+  label: string;
+  title: string;
+  tagline: string;
+  body: string;
+  readinessPct: number;
+  nextSteps: string[];
+  primaryCTA: { label: string; href: string };
+  secondaryCTA: { label: string; href: string };
+};
+
+const resultsEn: Record<ResultKey, ResultDef> = {
   strategy: {
     label: "01 · AI Strategy & Roadmap",
     title: "AI Strategy & Roadmap",
     tagline: "Plan before you build.",
-    body: "Based on your answers, you need clarity and direction before committing to implementation. An AI Strategy engagement defines what to build, in what order, and with what governance — so every investment is correctly sequenced.",
+    body: "Start with readiness, governance, prioritization, and a sequenced roadmap before large implementation spend.",
     readinessPct: 42,
     nextSteps: [
       "AI Readiness Assessment (2–4 weeks) — diagnostic across data, infrastructure, talent, and governance to identify high-value AI opportunities and blockers.",
@@ -128,42 +175,158 @@ const results: Record<
   },
 };
 
+const resultsAr: Record<ResultKey, ResultDef> = {
+  strategy: {
+    label: "01 · إستراتيجية الذكاء الاصطناعي وبناء المخطط",
+    title: "إستراتيجية الذكاء الاصطناعي وبناء المخطط",
+    tagline: "خطط قبل أن تبني.",
+    body: "ابدأ بتقييم الجاهزية، ووضع إطار الحوكمة، وتحديد الأولويات، وبناء خارطة طريق متسلسلة قبل الاستثمار في مشاريع تنفيذية واسعة النطاق.",
+    readinessPct: 42,
+    nextSteps: [
+      "تقييم جاهزية الذكاء الاصطناعي (2–4 أسابيع) — تقييم شامل للبيانات والبنية التحتية والكفاءات والحوكمة لتحديد الفرص ذات القيمة العالية والعوائق المحتملة.",
+      "مخطط الاستثمار في الذكاء الاصطناعي (4–6 أسابيع) — خارطة طريق مرتبة حسب الأولوية لمدة 18–36 شهرًا تتضمن حالات الأعمال، والاعتماديات، ومنطق العائد على الاستثمار، وجاهزة لعرضها على الإدارة التنفيذية.",
+      "تصميم مركز التميز للذكاء الاصطناعي — نموذج التشغيل، وهيكل الفريق، والأدوات، ومسار تطوير القدرات اللازمة لتوسيع تبني الذكاء الاصطناعي داخليًا.",
+    ],
+    primaryCTA: { label: "استكشف إستراتيجية الذكاء الاصطناعي ←", href: "/services" },
+    secondaryCTA: { label: "احجز مكالمة استراتيجية", href: "/contact" },
+  },
+  build: {
+    label: "02 · الخدمات الاحترافية للذكاء الاصطناعي",
+    title: "الخدمات الاحترافية للذكاء الاصطناعي",
+    tagline: "البناء، التكامل، والنشر.",
+    body: "تُظهر إجاباتك أن لديك رؤية واضحة وأنك مستعد للتنفيذ. تقدم Adopters مشاريع تجريبية، وتكاملات للأنظمة، ومنصات بيانات، وهندسة إنتاجية للذكاء الاصطناعي — لنقل حالات الاستخدام لديك من مرحلة التخطيط إلى التشغيل الفعلي.",
+    readinessPct: 71,
+    nextSteps: [
+      "تنفيذ إثبات المفهوم والنماذج التجريبية (8–12 أسبوعًا) — برنامج منظم يبدأ بتحديد المشكلة وينتهي بنموذج تجريبي يعمل على بيانات حقيقية.",
+      "تكامل أنظمة الذكاء الاصطناعي (3–6 أشهر) — تنفيذ متكامل للذكاء الاصطناعي وربطه بالأنظمة وسير العمل والمنصات القائمة.",
+      "هندسة الذكاء الاصطناعي وعمليات MLOps (2–4 أشهر) — إدارة إصدارات النماذج، وخطوط إعادة التدريب الآلية، ومراقبة الانحراف، وعمليات النشر.",
+    ],
+    primaryCTA: { label: "استكشف الخدمات الاحترافية ←", href: "/services" },
+    secondaryCTA: { label: "احجز استشارة تنفيذية", href: "/contact" },
+  },
+  operate: {
+    label: "03 · الخدمات المُدارة للذكاء الاصطناعي",
+    title: "الخدمات المُدارة للذكاء الاصطناعي",
+    tagline: "ضمان استمرارية التشغيل. ومواصلة التطوير.",
+    body: "الذكاء الاصطناعي قيد التشغيل بالفعل أو على وشك الإطلاق في مؤسستك. تحافظ خدمات Adopters المُدارة على مراقبة نماذجك، وإعادة تدريبها، وامتثالها، وتحسينها المستمر — بعمليات مدعومة باتفاقية مستوى خدمة وفريق دعم مخصص للذكاء الاصطناعي.",
+    readinessPct: 88,
+    nextSteps: [
+      "عمليات ومراقبة الذكاء الاصطناعي — مراقبة سلامة النماذج، ورصد الانحراف، وتنبيهات الأداء، والاستجابة للحوادث في الأنظمة المشغلة فعليًا.",
+      "إعادة التدريب المستمرة — دورات إعادة تدريب مجدولة، وتقييمات دورية، وعمليات نشر وتحكم آمنة مع تغير البيانات.",
+      "فريق دعم متخصص للذكاء الاصطناعي — فريق مرن من خبراء الذكاء الاصطناعي والبيانات والمنصات يعمل جنبًا إلى جنب مع فريقك الداخلي بشكل مستمر.",
+    ],
+    primaryCTA: { label: "استكشف الخدمات المُدارة ←", href: "/services" },
+    secondaryCTA: { label: "احجز مراجعة تشغيلية", href: "/contact" },
+  },
+  intelligent: {
+    label: "المنتج · Adopters Intelligent",
+    title: "Adopters Intelligent",
+    tagline: "طبقة ذكاء موحدة عبر جميع بياناتك.",
+    body: "يشير ملفك إلى حاجة لمنصة ذكاء مؤسسية. تحوّل Adopters Intelligent المعلومات المتفرقة من المستندات وواجهات البرمجة والتغذيات البيانية إلى ذكاء جاهز لاتخاذ القرار — تُقدَّم بهويتك التجارية الخاصة مع سيادة كاملة للبيانات عبر بلاد الشام والخليج.",
+    readinessPct: 58,
+    nextSteps: [
+      "اطلب جلسة استعراض للمنتج للاطلاع على عمل ذكاء GraphRAG عبر مصادر البيانات المؤسسية العربية والإنجليزية.",
+      "ناقش خيارات النشر بعلامة تجارية خاصة — سحابي، أو سيادي، أو هجين — لمؤسستك أو شبكة شركائك.",
+      "اجمع بين هذا الحل ومشروع إستراتيجية للذكاء الاصطناعي لبناء خارطة طريق الحوكمة والتبني إلى جانب نشر المنصة.",
+    ],
+    primaryCTA: { label: "استكشف Adopters Intelligent ←", href: "/products" },
+    secondaryCTA: { label: "اطلب عرضاً توضيحياً", href: "/contact" },
+  },
+};
+
 // ─── Answer context labels ────────────────────────────────────────────────────
 
-const industryLabel: Record<string, string> = {
-  finance: "Finance / Legal / Compliance",
+const industryLabelEn: Record<string, string> = {
+  finance: "Finance / Legal",
   healthcare: "Healthcare / Public Sector",
   retail: "Retail & Consumer",
   manufacturing: "Manufacturing & Industrial",
 };
 
-const challengeLabel: Record<string, string> = {
-  roadmap: "needs a clear AI roadmap and prioritization",
-  data: "needs one intelligence layer across scattered data",
-  build: "ready to implement — needs build support",
-  monitoring: "AI is live and needs operations and monitoring",
+const industryLabelAr: Record<string, string> = {
+  finance: "التمويل / القانون",
+  healthcare: "الرعاية الصحية / القطاع العام",
+  retail: "التجزئة والمستهلك",
+  manufacturing: "التصنيع والصناعة",
 };
 
-const journeyLabel: Record<string, string> = {
-  exploring: "just getting started with AI",
-  plan: "has a plan — ready to build",
-  implementing: "currently mid-implementation",
-  scaling: "running AI, scaling operations",
+const challengeLabelEn: Record<string, string> = {
+  roadmap: "the need for a clear roadmap",
+  data: "the need for one intelligence layer across scattered data",
+  build: "readiness to implement — needs build support",
+  monitoring: "live AI that needs operations and monitoring",
 };
 
-const sizeLabel: Record<string, string> = {
-  small: "small team",
-  midsize: "mid-size organization",
-  enterprise: "enterprise",
-  regulated: "regulated enterprise",
+const challengeLabelAr: Record<string, string> = {
+  roadmap: "الحاجة إلى خارطة طريق واضحة",
+  data: "الحاجة إلى طبقة ذكاء موحدة للبيانات المتفرقة",
+  build: "الجاهزية للتنفيذ والحاجة إلى دعم البناء",
+  monitoring: "ذكاء اصطناعي مُشغّل يحتاج إلى تشغيل ومراقبة",
 };
+
+const sizeLabelEn: Record<string, string> = {
+  small: "a small organization",
+  midsize: "a mid-size organization",
+  enterprise: "an enterprise",
+  regulated: "a regulated enterprise",
+};
+
+const sizeLabelAr: Record<string, string> = {
+  small: "المؤسسات الصغيرة",
+  midsize: "المؤسسات المتوسطة الحجم",
+  enterprise: "المؤسسات الكبيرة",
+  regulated: "المؤسسات الخاضعة لتنظيمات ورقابة عالية",
+};
+
+const sizeLabelArWithLam: Record<string, string> = {
+  small: "للمؤسسات الصغيرة",
+  midsize: "للمؤسسات المتوسطة الحجم",
+  enterprise: "للمؤسسات الكبيرة",
+  regulated: "للمؤسسات الخاضعة لتنظيمات ورقابة عالية",
+};
+
+const pageCopy = {
+  en: {
+    heroLabel: "AI Assessment",
+    heroTitleBefore: "Find your best AI path in ",
+    heroTitleAccent: "60 seconds.",
+    heroBody: "Answer four quick questions and get a recommended starting point: Strategy, Build, Operate, Adopters Intelligent.",
+    back: "Back",
+    next: "Next",
+    seeRecommendation: "See recommendation",
+    recommendedPath: "Recommended path",
+    whyThisFits: "Why this fits your answers",
+    industryContext: "Industry context",
+    mainChallenge: "Main challenge",
+    deliveryModelFits: "Recommended delivery model fits",
+    suggestedNextSteps: "Suggested next steps",
+    aiReadiness: "AI Readiness",
+    startOver: "← Start over",
+  },
+  ar: {
+    heroLabel: "تقييم الذكاء الاصطناعي",
+    heroTitleBefore: "اكتشف مسار الذكاء الاصطناعي الأنسب لمؤسستك ",
+    heroTitleAccent: "في 60 ثانية.",
+    heroBody: "أجب عن أربعة أسئلة سريعة واحصل على توصية مخصصة لنقطة الانطلاق الأنسب لمؤسستك: الاستراتيجية، البناء، التشغيل، أو Adopters Intelligent.",
+    back: "رجوع",
+    next: "التالي",
+    seeRecommendation: "عرض التوصية",
+    recommendedPath: "المسار الموصى به",
+    whyThisFits: "لماذا يناسبك هذا المسار",
+    industryContext: "سياق القطاع",
+    mainChallenge: "التحدي الرئيسي",
+    deliveryModelFits: "نموذج التنفيذ الموصى به: مناسب",
+    suggestedNextSteps: "الخطوات التالية المقترحة",
+    aiReadiness: "الجاهزية للAI",
+    startOver: "→ إعادة البدء",
+  }
+} as const;
 
 // ─── Scoring ──────────────────────────────────────────────────────────────────
 
 type Answers = Record<number, string>;
-type Result = (typeof results)[ResultKey];
 
-function scoreAnswers(answers: Answers): Result {
+function scoreAnswers(answers: Answers): ResultKey {
   const score: Record<ResultKey, number> = { strategy: 0, build: 0, operate: 0, intelligent: 0 };
 
   // Q1: industry — finance and healthcare are institutional data-heavy → Intelligent boost
@@ -197,12 +360,12 @@ function scoreAnswers(answers: Answers): Result {
     ["strategy", -1] as [ResultKey, number]
   );
 
-  return results[winner[0]];
+  return winner[0];
 }
 
 // ─── Components ───────────────────────────────────────────────────────────────
 
-function DonutChart({ pct }: { pct: number }) {
+function DonutChart({ pct, label, isAr }: { pct: number; label: string; isAr: boolean }) {
   const r = 58;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - pct / 100);
@@ -223,37 +386,42 @@ function DonutChart({ pct }: { pct: number }) {
           strokeWidth="16"
         />
       </svg>
-      <div className="relative text-center">
+      <div className="relative max-w-[110px] text-center">
         <p className="text-[28px] font-black leading-none" style={{ color: "#F3F5F4" }}>
           {pct}%
         </p>
-        <p className="mt-1.5 text-[9px] font-black uppercase tracking-[0.13em]" style={{ color: "#889B94" }}>
-          AI Readiness
+        <p
+          className={`mt-1.5 text-[9px] font-black leading-tight ${isAr ? "" : "uppercase tracking-[0.13em]"}`}
+          style={{ color: "#889B94" }}
+        >
+          {label}
         </p>
       </div>
     </div>
   );
 }
 
-function AssessmentHero() {
+function AssessmentHero({ locale }: { locale: Locale }) {
+  const content = pageCopy[locale];
+  const isAr = locale === "ar";
+
   return (
     <section className="hero-grid relative overflow-hidden py-16 md:py-[68px]" style={{ backgroundColor: "#071F19" }}>
       <img
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute right-0 top-0 w-[52%] max-w-[800px] select-none opacity-[0.38]"
+        className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
         src={watermarkLogo.src}
       />
-      <Container className="relative z-10">
+      <Container className={`relative z-10 ${isAr ? "text-right" : ""}`}>
         <AnimateIn variant="up">
-          <Label dark>AI Assessment</Label>
+          <Label dark>{content.heroLabel}</Label>
           <h1 className="mt-6 max-w-[680px] text-[40px] font-black leading-[1.05] md:text-[60px]" style={{ color: "#F3F5F4" }}>
-            Find your best AI path in{" "}
-            <em className="not-italic" style={{ color: "#68DB7D" }}>60 seconds.</em>
+            {content.heroTitleBefore}
+            <em className="not-italic" style={{ color: "#68DB7D" }}>{content.heroTitleAccent}</em>
           </h1>
           <p className="mt-5 max-w-[520px] text-base leading-7" style={{ color: "#C7D0CB" }}>
-            Answer four quick questions and get a recommended starting point: Strategy, Build,
-            Operate, or Adopters Intelligent.
+            {content.heroBody}
           </p>
         </AnimateIn>
       </Container>
@@ -265,14 +433,16 @@ function OptionCard({
   option,
   selected,
   onSelect,
+  isAr,
 }: {
   option: { id: string; title: string; body: string };
   selected: boolean;
   onSelect: () => void;
+  isAr: boolean;
 }) {
   return (
     <button
-      className="rounded-2xl border p-5 text-left transition-all duration-150"
+      className={`rounded-2xl border p-5 transition-all duration-150 ${isAr ? "text-right" : "text-left"}`}
       onClick={onSelect}
       style={{
         backgroundColor: selected ? "#1C533F" : "#102B24",
@@ -292,22 +462,32 @@ function OptionCard({
 }
 
 function ResultPanel({
-  result,
+  locale,
+  resultKey,
+  steps,
   answers,
   onReset,
 }: {
-  result: Result;
+  locale: Locale;
+  resultKey: ResultKey;
+  steps: typeof stepsEn;
   answers: Answers;
   onReset: () => void;
 }) {
-  const industry = industryLabel[answers[0]] ?? "your industry";
-  const challenge = challengeLabel[answers[1]] ?? "your challenge";
-  const journey = journeyLabel[answers[2]] ?? "your journey stage";
-  const size = sizeLabel[answers[3]] ?? "your organization";
+  const isAr = locale === "ar";
+  const content = pageCopy[locale];
+  const result = (isAr ? resultsAr : resultsEn)[resultKey];
+  const industryLabel = isAr ? industryLabelAr : industryLabelEn;
+  const challengeLabel = isAr ? challengeLabelAr : challengeLabelEn;
+  const sizeLabel = isAr ? sizeLabelArWithLam : sizeLabelEn;
+
+  const industry = industryLabel[answers[0]] ?? industryLabel.finance;
+  const challenge = challengeLabel[answers[1]] ?? challengeLabel.roadmap;
+  const size = sizeLabel[answers[3]] ?? sizeLabel.small;
 
   return (
     <section className="pb-24 pt-10 md:pb-[92px]" style={{ backgroundColor: "#0C241D" }}>
-      <Container>
+      <Container className={isAr ? "text-right" : ""}>
         <div className="mx-auto max-w-[752px]">
           {/* Progress: all complete */}
           <div className="flex gap-2">
@@ -323,7 +503,7 @@ function ResultPanel({
             <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
               <div className="flex-1">
                 <p className="text-[11px] font-black uppercase tracking-[0.16em]" style={{ color: "#68DB7D" }}>
-                  Recommended path
+                  {content.recommendedPath}
                 </p>
                 <p className="mt-1 text-[11px] font-semibold" style={{ color: "#889B94" }}>
                   {result.label}
@@ -336,7 +516,7 @@ function ResultPanel({
                 </p>
               </div>
               <div className="flex justify-center md:block">
-                <DonutChart pct={result.readinessPct} />
+                <DonutChart isAr={isAr} label={content.aiReadiness} pct={result.readinessPct} />
               </div>
             </div>
 
@@ -348,13 +528,13 @@ function ResultPanel({
             {/* Why this fits */}
             <div className="mt-6 rounded-xl border p-5" style={{ borderColor: "#1B3B31", backgroundColor: "#081D17" }}>
               <p className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: "#68DB7D" }}>
-                Why this fits your answers
+                {content.whyThisFits}
               </p>
               <ul className="mt-3 space-y-2.5">
                 {[
-                  `${industry} industry context`,
-                  `Your organization ${challenge}`,
-                  `${journey} — ${size}`,
+                  `${content.industryContext}: ${industry}`,
+                  `${content.mainChallenge}: ${challenge}`,
+                  `${content.deliveryModelFits} ${size}.`,
                 ].map((item) => (
                   <li className="flex items-start gap-3 text-[13px] leading-5" key={item} style={{ color: "#C7D0CB" }}>
                     <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: "#68DB7D" }} />
@@ -367,7 +547,7 @@ function ResultPanel({
             {/* Suggested next steps */}
             <div className="mt-6">
               <p className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: "#889B94" }}>
-                Suggested next steps
+                {content.suggestedNextSteps}
               </p>
               <ol className="mt-3 space-y-3">
                 {result.nextSteps.map((step, i) => (
@@ -414,7 +594,7 @@ function ResultPanel({
               style={{ color: "#889B94" }}
               type="button"
             >
-              ← Start over
+              {content.startOver}
             </button>
           </div>
         </div>
@@ -423,7 +603,10 @@ function ResultPanel({
   );
 }
 
-function QuizSection() {
+function QuizSection({ locale }: { locale: Locale }) {
+  const isAr = locale === "ar";
+  const content = pageCopy[locale];
+  const steps = isAr ? stepsAr : stepsEn;
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [done, setDone] = useState(false);
@@ -455,15 +638,17 @@ function QuizSection() {
     return (
       <ResultPanel
         answers={answers}
+        locale={locale}
         onReset={handleReset}
-        result={scoreAnswers(answers)}
+        resultKey={scoreAnswers(answers)}
+        steps={steps}
       />
     );
   }
 
   return (
     <section className="pb-24 pt-10 md:pb-[92px]" style={{ backgroundColor: "#0C241D" }}>
-      <Container>
+      <Container className={isAr ? "text-right" : ""}>
         <div className="mx-auto max-w-[752px]">
           {/* Progress bars */}
           <div className="flex gap-2">
@@ -497,6 +682,7 @@ function QuizSection() {
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {current.options.map((opt) => (
                 <OptionCard
+                  isAr={isAr}
                   key={opt.id}
                   onSelect={() => setAnswers((a) => ({ ...a, [step]: opt.id }))}
                   option={opt}
@@ -520,7 +706,7 @@ function QuizSection() {
               }}
               type="button"
             >
-              Back
+              {content.back}
             </button>
             <button
               className="inline-flex items-center gap-2 rounded-full px-8 py-2.5 text-sm font-extrabold transition"
@@ -534,7 +720,7 @@ function QuizSection() {
               }}
               type="button"
             >
-              {isLast ? "See recommendation" : "Next"} →
+              {isLast ? content.seeRecommendation : content.next} {isAr ? "←" : "→"}
             </button>
           </div>
         </div>
@@ -544,16 +730,17 @@ function QuizSection() {
 }
 
 export function AssessmentPage() {
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = usePersistentLocale();
+  const isAr = locale === "ar";
 
   return (
-    <div lang="en" style={{ backgroundColor: "#071915" }}>
-      <SiteHeader active="" allowArabic={false} locale={locale} setLocale={setLocale} />
+    <div dir={isAr ? "rtl" : "ltr"} lang={locale} style={{ backgroundColor: "#071915" }}>
+      <SiteHeader active="" locale={locale} setLocale={setLocale} />
       <main>
-        <AssessmentHero />
-        <QuizSection />
+        <AssessmentHero locale={locale} />
+        <QuizSection locale={locale} />
       </main>
-      <SiteFooter allowArabic={false} locale={locale} />
+      <SiteFooter locale={locale} />
     </div>
   );
 }

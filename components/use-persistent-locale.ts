@@ -15,6 +15,7 @@ const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("en");
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     try {
@@ -22,6 +23,8 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
       if (isLocale(storedLocale)) setLocaleState(storedLocale);
     } catch {
       // Keep the default locale when browser storage is unavailable.
+    } finally {
+      setReady(true);
     }
 
     const syncLocale = (event: StorageEvent) => {
@@ -45,7 +48,11 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(() => [locale, setLocale] as const, [locale, setLocale]);
 
-  return createElement(LocaleContext.Provider, { value }, children);
+  return createElement(
+    LocaleContext.Provider,
+    { value },
+    createElement("div", { style: { visibility: ready ? "visible" : "hidden" } }, children)
+  );
 }
 
 export function usePersistentLocale() {

@@ -9,26 +9,16 @@ export function LanguageToggle({
   locale: Locale;
   onChange: (locale: Locale) => void;
 }) {
-  const options = [
-    { value: "en" as const, label: "EN" },
-    { value: "ar" as const, label: "AR" }
-  ];
+  const nextLocale = locale === "en" ? "ar" : "en";
 
   return (
-    <div className="flex rounded-full bg-white/[0.06] p-1 text-[11px] font-black" aria-label="Language selector">
-      {options.map((item) => (
-        <button
-          aria-pressed={locale === item.value}
-          className={`rounded-full px-3 py-1 transition ${
-            locale === item.value ? "bg-brand-green text-[#031915]" : "text-white/65 hover:text-white"
-          }`}
-          key={item.value}
-          onClick={() => onChange(item.value)}
-          type="button"
-        >
-          {item.label}
-        </button>
-      ))}
-    </div>
+    <button
+      aria-label="Switch language"
+      className="rounded-full border border-brand-green bg-brand-green px-3 py-1.5 text-[11px] font-black text-[#031915] transition hover:opacity-90"
+      onClick={() => onChange(nextLocale)}
+      type="button"
+    >
+      {locale.toUpperCase()}
+    </button>
   );
 }
