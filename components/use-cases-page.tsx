@@ -251,17 +251,19 @@ export function UseCasesPage() {
     <main className="min-h-screen bg-paper" dir={isAr ? "rtl" : "ltr"} lang={locale}>
       <SiteHeader active="Use Cases" locale={locale} setLocale={setLocale} />
 
-      <section className="hero-grid relative overflow-hidden text-white">
-        <img
-          alt=""
-          aria-hidden="true"
-          className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
-          src={watermarkLogo.src}
-        />
+      <section className="hero-grid relative text-white">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <img
+            alt=""
+            aria-hidden="true"
+            className={`absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
+            src={watermarkLogo.src}
+          />
+        </div>
         <Container className={`relative z-10 flex min-h-[460px] items-center py-20 lg:py-24 ${isAr ? "text-right" : ""}`}>
           <div className="max-w-[650px]">
             <Label dark>{content.heroLabel}</Label>
-            <h1 className="mt-5 text-5xl font-black leading-[1.02] md:text-[60px]">
+            <h1 className={`mt-5 font-black ${isAr ? "text-[42px] md:text-[56px]" : "text-5xl leading-[1.02] md:text-[60px]"}`}>
               {content.heroTitleBefore}
               <span className="text-gradient-green">{content.heroTitleAccent}</span>
             </h1>
@@ -280,14 +282,14 @@ export function UseCasesPage() {
 
       <section className="bg-paper py-24 text-[#031915] md:py-[118px]" id="use-case-filter">
         <Container className={isAr ? "text-right" : ""}>
-          <div className="grid items-end gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className={`grid ${isAr ? "max-w-[780px] gap-5" : "items-end gap-12 lg:grid-cols-[1.1fr_0.9fr]"}`}>
             <div>
               <Label>{content.libraryLabel}</Label>
               <h2 className="mt-4 text-4xl font-black leading-[1.02] md:text-5xl">
                 {activeCopy.title}
               </h2>
             </div>
-            <p className="max-w-[480px] text-base leading-7 text-muted-light">{activeCopy.body}</p>
+            <p className={`${isAr ? "max-w-[700px]" : "max-w-[480px]"} text-base leading-7 text-muted-light`}>{activeCopy.body}</p>
           </div>
 
           <div className="mt-10 flex gap-2 overflow-x-auto pb-2 md:flex-wrap md:overflow-visible md:pb-0" role="tablist" aria-label="Use case categories">
@@ -371,7 +373,7 @@ export function UseCasesPage() {
             <div className="grid gap-8 md:grid-cols-[1fr_345px] md:items-center">
               <div className={isAr ? "text-right" : ""}>
                 <h2 className="text-4xl font-black md:text-5xl">{content.ctaTitle}</h2>
-                <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429]/80">{content.ctaBody}</p>
+                <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429] opacity-80">{content.ctaBody}</p>
               </div>
               <div className="grid gap-3">
                 <Button className="w-full !text-white" href="/contact" variant="dark">

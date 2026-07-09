@@ -143,7 +143,7 @@ function ProductMetaCard({
           key={label}
         >
           <span className={dark ? "text-muted-dark" : "text-muted-light"}>{label}</span>
-          <strong className={`text-right text-[15px] font-extrabold ${!dark && index === items.length - 1 ? "text-gradient-green" : ""}`}>
+          <strong className={`text-end text-[15px] font-extrabold ${!dark && index === items.length - 1 ? "text-gradient-green" : ""}`}>
             {value}
           </strong>
         </div>
@@ -176,30 +176,38 @@ function FeatureCard({
 
 function ImpactCard({
   item,
-  dark = false
+  dark = false,
+  isAr = false
 }: {
   item: readonly [string, string, string];
   dark?: boolean;
+  isAr?: boolean;
 }) {
   const [label, title, body] = item;
 
   return (
     <article className={`p-[29px] ${dark ? "text-white" : "text-[#031915]"}`}>
       <p className={`text-[11px] font-black uppercase tracking-[0.16em] ${dark ? "text-brand-green" : "text-[#1d695e]"}`}>{label}</p>
-      <h3 className="mt-3 text-2xl font-black leading-[1.2]">{title}</h3>
+      <h3 className={`mt-3 font-black leading-[1.2] ${isAr ? "text-xl" : "text-2xl"}`}>{title}</h3>
       <p className={`mt-3 text-sm leading-6 ${dark ? "text-muted-dark" : "text-muted-light"}`}>{body}</p>
     </article>
   );
 }
 
-function ArchitectureLayers({ layers }: { layers: readonly (readonly [string, string, string])[] }) {
+function ArchitectureLayers({
+  isAr,
+  layers
+}: {
+  isAr: boolean;
+  layers: readonly (readonly [string, string, string])[];
+}) {
   return (
     <div className="overflow-hidden rounded-2xl border border-[rgba(37,217,157,0.08)] bg-white">
       {layers.map(([layer, title, body], index) => (
         <div
           className={`grid min-h-[112px] items-center gap-4 px-6 py-6 md:gap-6 md:py-0 md:grid-cols-[76px_240px_1fr] md:px-0 ${
             index < layers.length - 1 ? "border-b border-[rgba(37,217,157,0.08)]" : ""
-          } bg-[linear-gradient(90deg,rgba(91,228,94,0.08)_0%,#ffffff_36%)]`}
+          } ${isAr ? "bg-[linear-gradient(270deg,rgba(91,228,94,0.08)_0%,#ffffff_36%)]" : "bg-[linear-gradient(90deg,rgba(91,228,94,0.08)_0%,#ffffff_36%)]"}`}
           key={layer}
         >
           <div className="flex justify-start md:justify-center">
@@ -221,17 +229,19 @@ function ProductsHero({ locale }: { locale: Locale }) {
   const heroProductTags = isAr ? heroProductTagsAr : heroProductTagsEn;
 
   return (
-    <section className="hero-grid relative overflow-hidden bg-brand-dark py-20 text-white md:py-[86px]">
-      <img
-        alt=""
-        aria-hidden="true"
-        className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
-        src={watermarkLogo.src}
-      />
+    <section className="hero-grid relative bg-brand-dark py-20 text-white md:py-[86px]">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          alt=""
+          aria-hidden="true"
+          className={`absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
+          src={watermarkLogo.src}
+        />
+      </div>
       <Container className={`relative z-10 grid min-h-[552px] items-center gap-14 lg:grid-cols-[1fr_0.96fr] ${isAr ? "text-right" : ""}`}>
         <div className="max-w-[540px]">
           <Label dark>{content.heroLabel}</Label>
-          <h1 className="mt-7 text-[40px] font-black leading-[1.05] tracking-normal md:text-[52px]">
+          <h1 className={`mt-7 font-black tracking-normal ${isAr ? "text-[38px] md:text-[50px]" : "text-[40px] leading-[1.05] md:text-[52px]"}`}>
             {content.heroTitleBefore}
             <span className="text-gradient-green">{content.heroTitleAccent1}</span>
             {content.heroTitleMiddle}
@@ -247,7 +257,7 @@ function ProductsHero({ locale }: { locale: Locale }) {
             </Button>
           </div>
         </div>
-        <article className={`flex w-full max-w-[539px] flex-col items-start gap-[26px] rounded-[28px] border border-[rgba(135,190,175,0.18)] bg-[linear-gradient(180deg,rgba(8,49,41,0.82)_0%,rgba(6,36,30,0.92)_100%)] p-[34px] shadow-[0_24px_70px_rgba(0,0,0,0.28)] ${isAr ? "justify-self-start" : "justify-self-end"}`}>
+        <article className="flex w-full max-w-[539px] flex-col items-start justify-self-end gap-[26px] rounded-[28px] border border-[rgba(135,190,175,0.18)] bg-[linear-gradient(180deg,rgba(8,49,41,0.82)_0%,rgba(6,36,30,0.92)_100%)] p-[34px] shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
           <div className="flex w-full flex-wrap items-center justify-between gap-3">
             <h2 className="text-[26px] font-black leading-tight">{content.heroCardTitle}</h2>
             <span className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-brand-mint/[0.32] bg-[#0a2e27] px-[15px] py-[9px] text-[11px] font-extrabold uppercase tracking-[0.88px] text-[#25d99d]">
@@ -259,7 +269,7 @@ function ProductsHero({ locale }: { locale: Locale }) {
           <div className="flex flex-wrap gap-2">
             {heroProductTags.map((tag) => (
               <span
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[13px] font-semibold text-white/78"
+                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[13px] font-semibold text-white opacity-[0.78]"
                 key={tag}
               >
                 {tag}
@@ -301,7 +311,7 @@ function IntelligentSection({ locale }: { locale: Locale }) {
           <Label>{content.architectureLabel}</Label>
           <h3 className="mt-4 max-w-[532px] text-[34px] font-black leading-[1.15]">{content.architectureTitle}</h3>
           <div className="mt-8">
-            <ArchitectureLayers layers={architectureLayers} />
+            <ArchitectureLayers isAr={isAr} layers={architectureLayers} />
           </div>
         </AnimateIn>
 
@@ -328,7 +338,7 @@ function IntelligentSection({ locale }: { locale: Locale }) {
             {intelligentImpact.map((item, index) => (
               <AnimateIn delay={index * 120} key={item[0]} variant="up">
                 <div className={`h-full ${index < intelligentImpact.length - 1 ? "border-b border-border-light md:border-b-0 md:border-e" : ""}`}>
-                  <ImpactCard item={item} />
+                  <ImpactCard isAr={isAr} item={item} />
                 </div>
               </AnimateIn>
             ))}
@@ -350,7 +360,7 @@ function ProductsCTA({ locale }: { locale: Locale }) {
           <div className="grid gap-8 md:grid-cols-[1fr_345px] md:items-center">
             <div className={isAr ? "text-right" : ""}>
               <h2 className="text-3xl font-black md:text-[38px]">{content.ctaTitle}</h2>
-              <p className="mt-4 max-w-[600px] text-sm font-semibold leading-6 text-[#083429]/80">{content.ctaBody}</p>
+              <p className="mt-4 max-w-[600px] text-sm font-semibold leading-6 text-[#083429] opacity-80">{content.ctaBody}</p>
             </div>
             <div className="grid gap-3">
               <Button className="w-full !text-white" href="/contact" variant="dark">

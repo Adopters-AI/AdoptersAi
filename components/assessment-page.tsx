@@ -406,17 +406,24 @@ function AssessmentHero({ locale }: { locale: Locale }) {
   const isAr = locale === "ar";
 
   return (
-    <section className="hero-grid relative overflow-hidden py-16 md:py-[68px]" style={{ backgroundColor: "#071F19" }}>
-      <img
-        alt=""
-        aria-hidden="true"
-        className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
-        src={watermarkLogo.src}
-      />
+    <section className="hero-grid relative py-16 md:py-[68px]" style={{ backgroundColor: "#071F19" }}>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          alt=""
+          aria-hidden="true"
+          className={`absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
+          src={watermarkLogo.src}
+        />
+      </div>
       <Container className={`relative z-10 ${isAr ? "text-right" : ""}`}>
         <AnimateIn variant="up">
           <Label dark>{content.heroLabel}</Label>
-          <h1 className="mt-6 max-w-[680px] text-[40px] font-black leading-[1.05] md:text-[60px]" style={{ color: "#F3F5F4" }}>
+          <h1
+            className={`mt-6 max-w-[680px] font-black ${
+              isAr ? "text-[38px] md:text-[54px]" : "text-[40px] leading-[1.05] md:text-[60px]"
+            }`}
+            style={{ color: "#F3F5F4" }}
+          >
             {content.heroTitleBefore}
             <em className="not-italic" style={{ color: "#68DB7D" }}>{content.heroTitleAccent}</em>
           </h1>
@@ -433,16 +440,14 @@ function OptionCard({
   option,
   selected,
   onSelect,
-  isAr,
 }: {
   option: { id: string; title: string; body: string };
   selected: boolean;
   onSelect: () => void;
-  isAr: boolean;
 }) {
   return (
     <button
-      className={`rounded-2xl border p-5 transition-all duration-150 ${isAr ? "text-right" : "text-left"}`}
+      className="rounded-2xl border p-5 text-start transition-all duration-150"
       onClick={onSelect}
       style={{
         backgroundColor: selected ? "#1C533F" : "#102B24",
@@ -682,7 +687,6 @@ function QuizSection({ locale }: { locale: Locale }) {
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {current.options.map((opt) => (
                 <OptionCard
-                  isAr={isAr}
                   key={opt.id}
                   onSelect={() => setAnswers((a) => ({ ...a, [step]: opt.id }))}
                   option={opt}

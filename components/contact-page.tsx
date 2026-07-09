@@ -137,17 +137,23 @@ function ContactHero({ locale }: { locale: Locale }) {
   const isAr = locale === "ar";
 
   return (
-    <section className="hero-grid relative overflow-hidden bg-brand-dark py-20 text-white md:py-[86px]">
-      <img
-        alt=""
-        aria-hidden="true"
-        className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
-        src={watermarkLogo.src}
-      />
+    <section className="hero-grid relative bg-brand-dark py-20 text-white md:py-[86px]">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          alt=""
+          aria-hidden="true"
+          className={`absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
+          src={watermarkLogo.src}
+        />
+      </div>
       <Container className={`relative z-10 ${isAr ? "text-right" : ""}`}>
         <AnimateIn variant="up">
           <Label dark>{content.heroLabel}</Label>
-          <h1 className="mt-7 max-w-[680px] text-[44px] font-black leading-[1.02] md:text-[68px]">
+          <h1
+            className={`mt-7 max-w-[680px] font-black ${
+              isAr ? "text-[38px] md:text-[56px]" : "text-[44px] leading-[1.02] md:text-[68px]"
+            }`}
+          >
             {content.heroTitleBefore}
             <em className="not-italic text-gradient-green">{content.heroTitleAccent}</em>
           </h1>
@@ -158,7 +164,7 @@ function ContactHero({ locale }: { locale: Locale }) {
   );
 }
 
-function CustomSelect({ value, onChange, options, isAr }: { value: string; onChange: (v: string) => void; options: string[]; isAr: boolean }) {
+function CustomSelect({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -173,7 +179,7 @@ function CustomSelect({ value, onChange, options, isAr }: { value: string; onCha
   return (
     <div className="relative" ref={ref}>
       <button
-        className={`flex w-full items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.05] px-4 py-3 text-sm text-white transition focus:border-brand-green focus:outline-none ${isAr ? "text-right" : "text-left"}`}
+        className="flex w-full items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.05] px-4 py-3 text-start text-sm text-white transition focus:border-brand-green focus:outline-none"
         onClick={() => setOpen((v) => !v)}
         type="button"
       >
@@ -192,7 +198,7 @@ function CustomSelect({ value, onChange, options, isAr }: { value: string; onCha
           {options.map((opt) => (
             <li key={opt}>
               <button
-                className={`w-full px-4 py-3 text-sm transition hover:bg-white/[0.06] ${isAr ? "text-right" : "text-left"} ${
+                className={`w-full px-4 py-3 text-start text-sm transition hover:bg-white/[0.06] ${
                   value === opt ? "font-bold text-brand-green" : "text-white"
                 }`}
                 onClick={() => { onChange(opt); setOpen(false); }}
@@ -309,7 +315,6 @@ function ContactFormSection({ locale }: { locale: Locale }) {
                   <div>
                     <label className={labelClass}>{content.topic}</label>
                     <CustomSelect
-                      isAr={isAr}
                       onChange={(v) => setFields((f) => ({ ...f, topic: v }))}
                       options={topicOptions}
                       value={fields.topic}
@@ -318,7 +323,6 @@ function ContactFormSection({ locale }: { locale: Locale }) {
                   <div>
                     <label className={labelClass}>{content.timeline}</label>
                     <CustomSelect
-                      isAr={isAr}
                       onChange={(v) => setFields((f) => ({ ...f, timeline: v }))}
                       options={timelineOptions}
                       value={fields.timeline}
@@ -369,7 +373,7 @@ function ContactFormSection({ locale }: { locale: Locale }) {
                     </span>
                     {href ? (
                       <a
-                        className={`text-right text-sm font-semibold transition ${
+                        className={`text-end text-sm font-semibold transition ${
                           green ? "text-[#25d99d] hover:text-[#5be45e]" : "text-white"
                         }`}
                         href={href}
@@ -377,7 +381,7 @@ function ContactFormSection({ locale }: { locale: Locale }) {
                         {value}
                       </a>
                     ) : (
-                      <span className={`text-right text-sm font-semibold ${green ? "text-[#25d99d]" : "text-white"}`}>
+                      <span className={`text-end text-sm font-semibold ${green ? "text-[#25d99d]" : "text-white"}`}>
                         {value}
                       </span>
                     )}

@@ -281,26 +281,38 @@ function HeroIntelligenceCard({ locale }: { locale: Locale }) {
         console: "تمكين المؤسسات من تنفيذ حلول الذكاء الاصطناعي",
         confidence: "مستوى الثقة في اتخاذ القرار",
         insight: "إشارات أولوية من البيانات العامة والداخلية",
-        briefing: "ملخص معلوماتي موثق المصادر باللغتين العربية والإنجليزية"
+        briefing: "ملخص معلوماتي موثق المصادر باللغتين العربية والإنجليزية",
+        statusReady: "جاهز",
+        statusGenerated: "تم التوليد"
       }
     : {
         console: "Adopters Intelligent · Intelligence Console",
         confidence: "Decision confidence",
         insight: "Priority insight from public + internal datasets",
-        briefing: "Arabic/English source-grounded briefing"
+        briefing: "Arabic/English source-grounded briefing",
+        statusReady: "Ready",
+        statusGenerated: "Generated"
       };
+
+  const dots = (
+    <div className="flex shrink-0 gap-[7px]">
+      <span className="h-[10px] w-[10px] rounded-full bg-[#21463e]" />
+      <span className="h-[10px] w-[10px] rounded-full bg-[#1e6d69]" />
+      <span className="h-[10px] w-[10px] rounded-full bg-[#25d99d]" />
+    </div>
+  );
+
+  const consoleTitle = (
+    <p className={`min-w-0 text-end text-[9px] font-extrabold leading-4 text-[#6e867e] sm:text-[11px] ${locale === "ar" ? "text-right" : "uppercase tracking-[1.5px]"}`}>
+      {content.console}
+    </p>
+  );
 
   return (
     <div className="w-full max-w-[554px] overflow-hidden rounded-[24px] border border-[#21463e] bg-[#071f1b] shadow-[0_32px_80px_rgba(0,0,0,0.25)]">
       <div className="flex min-h-[46px] items-center justify-between gap-3 border-b border-[#163a33] bg-white/[0.03] px-3 py-2 sm:px-4">
-        <div className="flex shrink-0 gap-[7px]">
-          <span className="h-[10px] w-[10px] rounded-full bg-[#21463e]" />
-          <span className="h-[10px] w-[10px] rounded-full bg-[#1e6d69]" />
-          <span className="h-[10px] w-[10px] rounded-full bg-[#25d99d]" />
-        </div>
-        <p className={`min-w-0 text-end text-[9px] font-extrabold leading-4 text-[#6e867e] sm:text-[11px] ${locale === "ar" ? "" : "uppercase tracking-[1.5px]"}`}>
-          {content.console}
-        </p>
+        {locale === "ar" ? consoleTitle : dots}
+        {locale === "ar" ? dots : consoleTitle}
       </div>
 
       <div className="space-y-3 p-3 sm:space-y-[14px] sm:p-[18px]">
@@ -336,8 +348,8 @@ function HeroIntelligenceCard({ locale }: { locale: Locale }) {
         </div>
 
         <div className="space-y-[10px] rounded-[14px] border border-[#163a33] bg-white/[0.04] p-3 sm:p-[18px]">
-          <HeroInfoRow status="Ready" text={content.insight} />
-          <HeroInfoRow status="Generated" text={content.briefing} />
+          <HeroInfoRow status={content.statusReady} text={content.insight} />
+          <HeroInfoRow status={content.statusGenerated} text={content.briefing} />
         </div>
       </div>
     </div>
@@ -349,20 +361,26 @@ function Hero({ locale }: { locale: Locale }) {
   const isAr = locale === "ar";
 
   return (
-    <section className="hero-grid relative overflow-hidden text-white">
-      <img
-        alt=""
-        aria-hidden="true"
-        className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
-        src={watermarkLogo.src}
-      />
+    <section className="hero-grid relative text-white">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          alt=""
+          aria-hidden="true"
+          className={`absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
+          src={watermarkLogo.src}
+        />
+      </div>
       <Container className="relative z-10 grid min-h-[830px] items-center gap-12 py-20 lg:grid-cols-[1fr_0.9fr] lg:py-24">
         <div className={`max-w-[650px] ${isAr ? "text-right" : ""}`}>
-          <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-muted-dark">
+          <div className={`inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 font-black text-muted-dark ${isAr ? "text-[13px] leading-6" : "text-[10px] uppercase tracking-[0.12em]"}`}>
             <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
             {home.hero.eyebrow}
           </div>
-          <h1 className={`mt-7 text-balance text-5xl font-black md:text-7xl lg:text-[76px] ${isAr ? "leading-[1.25]" : "leading-[0.96]"}`}>
+          <h1
+            className={`mt-7 text-balance font-black ${
+              isAr ? "text-[42px] md:text-[60px] lg:text-[68px]" : "text-5xl leading-[0.96] md:text-7xl lg:text-[76px]"
+            }`}
+          >
             <span className="text-gradient-green">{home.hero.title[0]}</span> {home.hero.title[1]}{" "}
             <span className="text-gradient-green">{home.hero.title[2]}</span>
           </h1>
@@ -395,12 +413,12 @@ function LifecycleSection({ locale }: { locale: Locale }) {
     <section className="bg-paper py-24 md:py-[118px]">
       <Container className={isAr ? "text-right" : ""}>
         <AnimateIn variant="up">
-          <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
+          <div className={`grid ${isAr ? "max-w-[780px] gap-5 text-right" : "gap-12 md:grid-cols-2 md:items-end"}`}>
             <div>
               <Label>{section.label}</Label>
               <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] md:text-[42px] lg:text-5xl">{section.title}</h2>
             </div>
-            <p className="text-base leading-7 text-muted-light">{section.body}</p>
+            <p className={`text-base leading-7 text-muted-light ${isAr ? "max-w-[700px]" : ""}`}>{section.body}</p>
           </div>
         </AnimateIn>
         <div className="mt-14 grid border border-border-light bg-white lg:grid-cols-3">
@@ -414,7 +432,7 @@ function LifecycleSection({ locale }: { locale: Locale }) {
                   </>
                 ) : null}
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1e6d69]">{phase.eyebrow}</p>
-                <h3 className="mt-5 text-2xl font-black text-[#031915]">{phase.title}</h3>
+                <h3 className={`mt-5 font-black text-[#031915] ${isAr ? "min-h-[60px] text-[20px] xl:min-h-[30px]" : "text-2xl"}`}>{phase.title}</h3>
                 <p className="mt-5 max-w-[340px] text-sm font-light leading-6 text-muted-light">{phase.body}</p>
                 <span className={`absolute top-6 text-5xl font-black text-brand-mint/30 md:top-8 ${isAr ? "left-8 md:left-10" : "right-8 md:right-10"}`}>
                   {phase.number}
@@ -453,13 +471,13 @@ function ServicesSection({ locale }: { locale: Locale }) {
           {section.cards.map((service, index) => (
             <AnimateIn delay={index * 120} key={service.number} variant="up">
             <article
-              className="h-full rounded-2xl border border-white/10 bg-white p-7 text-[#031915] shadow-[0_0_0_1px_rgba(91,228,94,0.06),0_20px_55px_rgba(0,0,0,0.22)]"
+              className="flex h-full flex-col rounded-2xl border border-white/10 bg-white p-7 text-[#031915] shadow-[0_0_0_1px_rgba(91,228,94,0.06),0_20px_55px_rgba(0,0,0,0.22)]"
             >
               <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-card text-xs font-black text-white">{service.number}</span>
               <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1e6d69]">{service.type}</p>
               <h3 className="mt-3 text-xl font-black">{service.title}</h3>
               <p className="mt-3 min-h-20 text-sm font-light leading-6 text-muted-light">{service.body}</p>
-              <div className="mt-7 flex items-center border-t border-border-light pt-5 text-xs font-bold text-muted-light">
+              <div className="mt-auto flex items-center border-t border-border-light pt-5 text-xs font-bold text-muted-light">
                 <svg aria-hidden="true" className="me-2 shrink-0 text-[#1e6d69]" fill="none" height="13" viewBox="0 0 13 13" width="13">
                   <rect height="10.5" rx="1.5" stroke="currentColor" strokeWidth="1.2" width="11.5" x="0.75" y="1.75" />
                   <path d="M0.75 5h11.5" stroke="currentColor" strokeLinecap="round" strokeWidth="1.2" />
@@ -484,12 +502,12 @@ function ProductsSection({ locale }: { locale: Locale }) {
     <section className="bg-paper py-24 md:py-[118px]" id="products">
       <Container className={isAr ? "text-right" : ""}>
         <AnimateIn variant="up">
-          <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
+          <div className={`grid ${isAr ? "max-w-[780px] gap-5 text-right" : "gap-12 md:grid-cols-2 md:items-end"}`}>
             <div>
               <Label>{section.label}</Label>
               <h2 className="mt-4 text-4xl font-black leading-[1.05] text-[#031915] md:text-[42px] lg:text-5xl">{section.title}</h2>
             </div>
-            <p className="text-base leading-7 text-muted-light">{section.body}</p>
+            <p className={`text-base leading-7 text-muted-light ${isAr ? "max-w-[700px]" : ""}`}>{section.body}</p>
           </div>
         </AnimateIn>
         <AnimateIn delay={100} variant="up">
@@ -504,7 +522,7 @@ function ProductsSection({ locale }: { locale: Locale }) {
               {section.status}
             </span>
           </div>
-          <p className="mt-5 max-w-[740px] text-sm font-light leading-7 text-muted-light">{section.description}</p>
+          <p className="mt-5 max-w-[740px] text-base leading-7 text-muted-light">{section.description}</p>
           <a
             className="mt-7 inline-flex text-sm font-bold text-[#1e6d69] transition-colors hover:text-brand-mint"
             href="/products"
@@ -528,12 +546,12 @@ function UseCasesSection({ locale }: { locale: Locale }) {
     <section className="bg-brand-dark py-24 text-white md:py-[118px]" id="use-cases">
       <Container className={isAr ? "text-right" : ""}>
         <AnimateIn variant="up">
-          <div className={`grid gap-12 md:grid-cols-2 md:items-end ${isAr ? "text-right" : ""}`}>
+          <div className={`grid ${isAr ? "max-w-[800px] gap-5 text-right" : "gap-12 md:grid-cols-2 md:items-end"}`}>
             <div>
               <Label dark>{section.label}</Label>
               <h2 className="mt-4 text-4xl font-black leading-[1.05] text-white md:text-[42px] lg:text-5xl">{section.title}</h2>
             </div>
-            <p className="text-base leading-7 text-muted-dark">{section.body}</p>
+            <p className={`text-base leading-7 text-muted-dark ${isAr ? "max-w-[720px]" : ""}`}>{section.body}</p>
           </div>
         </AnimateIn>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -598,7 +616,7 @@ function CTASection({ locale }: { locale: Locale }) {
           <div className="grid gap-8 md:grid-cols-[1fr_345px] md:items-center">
             <div className={isAr ? "text-right" : ""}>
               <h2 className="text-4xl font-black md:text-5xl">{section.title}</h2>
-              <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429]/80">{section.body}</p>
+              <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429] opacity-80">{section.body}</p>
             </div>
             <div className="grid gap-3">
               <Button className="w-full !text-white" href="/assessment" variant="dark">

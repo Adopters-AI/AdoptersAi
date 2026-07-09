@@ -30,7 +30,7 @@
   --color-border-dark: var(--border-dark);
   --color-border-light: var(--border-light);
   --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
-  --font-arabic: var(--font-tajawal), Tahoma, Arial, sans-serif;
+  --font-arabic: var(--font-almarai), Tahoma, Arial, sans-serif;
   --font-arabic-original: var(--font-almarai-original), Tahoma, Arial, sans-serif;
   --font-poppins: var(--font-poppins-raw), Arial, Helvetica, sans-serif;
 }
@@ -65,18 +65,83 @@
   [lang="ar"] {
     font-family: var(--font-arabic);
     font-synthesis: none;
+    text-rendering: optimizeLegibility;
   }
 }
 
-[lang="ar"] h1,
-[lang="ar"] h2,
+[lang="ar"] :where(.font-black, .font-extrabold) {
+  font-weight: 700;
+}
+
+[lang="ar"] :where(.uppercase) {
+  text-transform: none;
+}
+
+/* Arabic is a cursive script — letter-spacing breaks the joins between letters,
+   showing up as gaps/lines (e.g. tracking-* utilities meant for uppercase English labels). */
+[lang="ar"] :where([class*="tracking-"]) {
+  letter-spacing: normal !important;
+}
+
+[lang="ar"] :where(h1, h2, h3) {
+  letter-spacing: normal !important;
+  text-wrap: balance;
+}
+
+[lang="ar"] h1 {
+  line-height: 1.45 !important;
+  overflow: visible;
+  padding-block: 0.14em 0.06em;
+}
+
+[lang="ar"] h2 {
+  line-height: 1.42 !important;
+}
+
 [lang="ar"] h3 {
   line-height: 1.5 !important;
 }
 
 /* Keep Arabic descenders and diacritics inside flexible line boxes across browsers. */
-[lang="ar"] :where(p, a, button, li, label, input, textarea, select) {
+[lang="ar"] :where(p, li) {
+  line-height: 1.78;
+}
+
+[lang="ar"] :where(a, button, label, input, textarea, select) {
+  line-height: 1.5;
+}
+
+[lang="ar"] :where(p, li, a, button, label, input, textarea, select, span, strong) {
+  letter-spacing: normal;
+}
+
+[lang="ar"] :where(input, textarea, select) {
+  text-align: start;
+}
+
+[lang="ar"] :where(.text-gradient-green) {
+  -webkit-text-fill-color: transparent;
+}
+
+[lang="ar"] h1 :where(.text-gradient-green) {
+  display: inline-block;
+  overflow: visible;
+  padding-block: 0.08em 0.04em;
+}
+
+[lang="ar"] .site-label {
+  font-size: 13px;
   line-height: 1.7;
+}
+
+[lang="ar"] :where(.text-\[10px\], .text-\[11px\]) {
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+[lang="ar"] :where(.text-\[12px\]) {
+  font-size: 13px;
+  line-height: 1.65;
 }
 
 .hero-grid {

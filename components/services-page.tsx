@@ -360,17 +360,23 @@ function ServiceHero({ locale }: { locale: Locale }) {
   const isAr = locale === "ar";
 
   return (
-    <section className="hero-grid relative overflow-hidden bg-brand-dark py-20 text-white md:py-[86px]">
-      <img
-        alt=""
-        aria-hidden="true"
-        className={`pointer-events-none absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
-        src={watermarkLogo.src}
-      />
+    <section className="hero-grid relative bg-brand-dark py-20 text-white md:py-[86px]">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          alt=""
+          aria-hidden="true"
+          className={`absolute top-0 w-[52%] max-w-[800px] select-none opacity-[0.38] ${isAr ? "left-0 -scale-x-100" : "right-0"}`}
+          src={watermarkLogo.src}
+        />
+      </div>
       <Container className="relative z-10 grid min-h-[512px] items-start gap-12 lg:grid-cols-[1fr_0.9fr]">
         <div className="max-w-[570px]">
           <Label dark>{content.heroLabel}</Label>
-          <h1 className="mt-8 text-balance text-5xl font-black leading-[1.02] md:text-7xl">
+          <h1
+            className={`mt-8 text-balance font-black ${
+              isAr ? "text-[42px] md:text-[62px]" : "text-5xl leading-[1.02] md:text-7xl"
+            }`}
+          >
             {content.heroTitleBefore}<span className="text-gradient-green">{content.heroTitleAccent}</span>{content.heroTitleAfter}
           </h1>
           <p className="mt-6 max-w-[570px] text-base leading-7 text-muted-dark">{content.heroBody}</p>
@@ -468,12 +474,13 @@ function OfferingCard({
   );
 }
 
-function DetailSection({ section }: { section: (typeof detailSectionsEn)[number] }) {
+function DetailSection({ locale, section }: { locale: Locale; section: (typeof detailSectionsEn)[number] }) {
   const dark = section.theme === "dark";
+  const isAr = locale === "ar";
 
   return (
     <section className={`${dark ? "bg-brand-dark text-white" : "bg-paper text-[#031915]"} py-24 md:py-[92px]`} id={section.id}>
-      <Container>
+      <Container className={isAr ? "text-right" : ""}>
         <div className="grid items-end gap-10 lg:grid-cols-[1fr_0.9fr] lg:gap-[56px]">
           <div>
             <Label dark={dark}>{section.label}</Label>
@@ -517,7 +524,7 @@ function ServicesCTA({ locale }: { locale: Locale }) {
           <div className="grid gap-8 md:grid-cols-[1fr_345px] md:items-center">
             <div>
               <h2 className="text-4xl font-black md:text-5xl">{content.ctaTitle}</h2>
-              <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429]/80">
+              <p className="mt-4 max-w-[700px] text-sm font-semibold leading-6 text-[#083429] opacity-80">
                 {content.ctaBody}
               </p>
             </div>
@@ -547,7 +554,7 @@ export function ServicesPage() {
         <ServiceHero locale={locale} />
         <ServiceLinesSection locale={locale} />
         {detailSections.map((section) => (
-          <DetailSection key={section.label} section={section} />
+          <DetailSection key={section.label} locale={locale} section={section} />
         ))}
         <ServicesCTA locale={locale} />
       </main>

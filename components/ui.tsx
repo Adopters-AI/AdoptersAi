@@ -37,7 +37,7 @@ export function Button({
 
   return (
     <Link
-      className={`inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-extrabold transition ${variants[variant]} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full px-6 text-center text-sm font-extrabold transition ${variants[variant]} ${className}`}
       href={href}
     >
       {children}
@@ -55,7 +55,7 @@ export function Label({
   centered?: boolean;
 }) {
   return (
-    <div className={`flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.18em] ${centered ? "justify-center" : ""}`}>
+    <div className={`site-label flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.18em] ${centered ? "justify-center" : ""}`}>
       <span className={`h-0.5 w-6 shrink-0 ${dark ? "bg-brand-green" : "bg-[#16b57f]"}`} />
       <span className={dark ? "text-gradient-green" : "text-[#0f7f63]"}>{children}</span>
     </div>

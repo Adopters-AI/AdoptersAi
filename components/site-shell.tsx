@@ -109,7 +109,11 @@ export function SiteHeader({
           <Logo />
         </Link>
         {/* Desktop nav */}
-        <nav className={`hidden items-center gap-9 text-center text-[14px] font-semibold leading-[21px] text-[#A7BDB6] md:flex ${isAr ? "" : "font-poppins"}`}>
+        <nav
+          className={`hidden items-center text-center font-semibold text-[#A7BDB6] md:flex ${
+            isAr ? "gap-6 text-[13px] leading-6" : "gap-9 text-[14px] leading-[21px] font-poppins"
+          }`}
+        >
           {content.nav.map(([item, href]) => (
             <Link
               className={`border-b py-2 transition hover:text-brand-green ${
@@ -159,7 +163,7 @@ export function SiteHeader({
               {content.nav.map(([item, href]) => (
                 <Link
                   className={`border-b border-white/[0.06] py-4 text-sm font-extrabold transition hover:text-brand-green ${
-                    isActiveItem(active, item) ? "text-brand-green" : "text-white/80"
+                    isActiveItem(active, item) ? "text-brand-green" : "text-white opacity-80"
                   }`}
                   href={href}
                   key={item}
@@ -199,7 +203,7 @@ export function SiteFooter({ locale, allowArabic = true }: { locale: Locale; all
           <div className="grid gap-9 sm:grid-cols-3">
             {content.columns.map(([title, ...items]) => (
               <div key={title}>
-                <h3 className="text-xs font-black uppercase tracking-[0.12em] text-white/55">{title}</h3>
+                <h3 className="text-xs font-black uppercase tracking-[0.12em] text-white opacity-[0.55]">{title}</h3>
                 <ul className="mt-5 space-y-4 text-sm text-muted-dark">
                   {items.map((item) => (
                     <li key={item}>
