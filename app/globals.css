@@ -60,6 +60,11 @@
 
   button {
     font: inherit;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
   }
 
   [lang="ar"] {
