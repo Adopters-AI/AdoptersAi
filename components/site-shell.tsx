@@ -11,7 +11,8 @@ const shellContent = {
       ["Services", "/services"],
       ["Products", "/products"],
       ["Use Cases", "/use-cases"],
-      ["AI Academy", "/ai-academy"]
+      ["AI Academy", "/ai-academy"],
+      ["PRDI", "/prdi"]
     ],
     bookCall: "Book a call",
     footerBody: "Helping Enterprises Implement AI Solutions.",
