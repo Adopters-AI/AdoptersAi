@@ -18,7 +18,7 @@ const shellContent = {
     footerBody: "Helping Enterprises Implement AI Solutions.",
     columns: [
       ["Company", "Home", "Services", "Products", "Use Cases"],
-      ["Explore", "AI Academy", "AI Assessment", "Contact"],
+      ["Explore", "AI Academy", "PRDI", "AI Assessment", "Contact"],
       ["Next Step", "Join AI Academy waitlist", "Take assessment", "Book a call"]
     ],
     copyright: "© 2026 Adopters®. All rights reserved.",
@@ -50,6 +50,7 @@ const footerLinks: Record<string, string> = {
   Products: "/products",
   "Use Cases": "/use-cases",
   "AI Academy": "/ai-academy",
+  PRDI: "/prdi",
   "AI Assessment": "/assessment",
   Contact: "/contact",
   "Join AI Academy waitlist": "/ai-academy#waitlist",
