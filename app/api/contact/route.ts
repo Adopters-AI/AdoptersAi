@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const recipient = "maharma@adoptersai.com";
+const recipient = "aelayyan@adoptersai.com";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
