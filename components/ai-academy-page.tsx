@@ -829,6 +829,23 @@ function WaitlistSection({ locale }: { locale: Locale }) {
   const roleOptions = isAr ? roleOptionsAr : roleOptionsEn;
   const trackOptions = tracks.map((t) => t.title);
 
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), type: "academy-waitlist" }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      window.alert(data.error ?? "Unable to join the waitlist.");
+      return;
+    }
+    form.reset();
+    window.alert("Thanks ? you're on the waitlist.");
+  }
+
   return (
     <section className="bg-brand-dark py-24 text-white md:py-[92px]" id="waitlist">
       <Container className={isAr ? "text-right" : ""}>
@@ -869,21 +886,21 @@ function WaitlistSection({ locale }: { locale: Locale }) {
           <div className="w-full rounded-[22px] border border-[rgba(135,190,175,0.2)] bg-[#163a33] px-6 py-8 sm:px-10 lg:px-[59px] lg:py-[35px]">
             <h3 className="text-xl font-black text-white">{copy.formTitle}</h3>
             <p className="mt-2 text-sm leading-6 text-muted-dark">{copy.formSubtitle}</p>
-            <form className="mt-7 space-y-5" onSubmit={(e) => e.preventDefault()}>
+            <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label className={darkLabelClass}>{copy.name}</label>
-                  <input className={darkInputClass} placeholder={copy.namePlaceholder} type="text" />
+                  <input className={darkInputClass} name="name" placeholder={copy.namePlaceholder} required type="text" />
                 </div>
                 <div>
                   <label className={darkLabelClass}>{copy.workEmail}</label>
-                  <input className={darkInputClass} placeholder={copy.emailPlaceholder} type="email" />
+                  <input className={darkInputClass} name="email" placeholder={copy.emailPlaceholder} required type="email" />
                 </div>
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label className={darkLabelClass}>{copy.company}</label>
-                  <input className={darkInputClass} placeholder={copy.companyPlaceholder} type="text" />
+                  <input className={darkInputClass} name="company" placeholder={copy.companyPlaceholder} type="text" />
                 </div>
                 <div>
                   <label className={darkLabelClass}>{copy.role}</label>
@@ -898,7 +915,9 @@ function WaitlistSection({ locale }: { locale: Locale }) {
                 <label className={darkLabelClass}>{copy.learnLabel}</label>
                 <textarea
                   className={`${darkInputClass} resize-none`}
+                  name="message"
                   placeholder={copy.learnPlaceholder}
+                  required
                   rows={5}
                 />
               </div>
