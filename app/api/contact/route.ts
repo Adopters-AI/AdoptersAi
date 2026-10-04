@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const recipient = "aelayyan@adoptersai.com";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
@@ -10,12 +9,13 @@ export async function POST(request: Request) {
   }
 
   const fields = body as Record<string, string>;
+  const recipient = process.env.CONTACT_TO_EMAIL;
   const { name, email, message } = fields;
   if (!name?.trim() || !email?.trim() || !message?.trim()) {
     return NextResponse.json({ error: "Name, email, and message are required." }, { status: 400 });
   }
 
-  if (!process.env.RESEND_API_KEY || !process.env.CONTACT_FROM_EMAIL) {
+  if (!process.env.RESEND_API_KEY || !process.env.CONTACT_FROM_EMAIL || !recipient) {
     return NextResponse.json({ error: "Email delivery is not configured." }, { status: 503 });
   }
 
