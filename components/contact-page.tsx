@@ -9,14 +9,14 @@ import watermarkLogo from "@/assets/watermark.png.png";
 
 const contactDetailsEn: { label: string; value: string; href?: string; green: boolean }[] = [
   { label: "Email", value: "maharma@adoptersai.com", href: "mailto:maharma@adoptersai.com", green: true },
-  { label: "Phone", value: "+972 598 00 11 55", href: "tel:+97259800115", green: true },
+  { label: "Phone", value: "+972 598 00 11 55", href: "tel:+972598001155", green: true },
   { label: "Site", value: "adoptersai.com", href: "https://adoptersai.com", green: true },
   { label: "Address", value: "Ramallah · Palestine", green: false }
 ];
 
 const contactDetailsAr: { label: string; value: string; href?: string; green: boolean }[] = [
   { label: "البريد الإلكتروني", value: "maharma@adoptersai.com", href: "mailto:maharma@adoptersai.com", green: true },
-  { label: "رقم الهاتف", value: "+972 598 00 11 55", href: "tel:+97259800115", green: true },
+  { label: "رقم الهاتف", value: "+972 598 00 11 55", href: "tel:+972598001155", green: true },
   { label: "الموقع الإلكتروني", value: "adoptersai.com", href: "https://adoptersai.com", green: true },
   { label: "العنوان", value: "رام الله · فلسطين", green: false }
 ];
@@ -24,10 +24,10 @@ const contactDetailsAr: { label: string; value: string; href?: string; green: bo
 const faqsEn = [
   {
     q: "What should I include in the message?",
-    a: "A two-week opportunity discovery sprint. We use it to qualify whether a longer engagement makes sense for both sides."
+    a: "A short description of the challenge or opportunity you want to address, your goals, and any details about your current data or systems. This helps the team understand your needs and point you to the right path."
   },
   {
-    q: "Can I ask for a Adopters Intelligent demo?",
+    q: "Can I ask for an Adopters Intelligent demo?",
     a: "Yes — select 'Products' in the Topic field and mention Adopters Intelligent in your message. We'll set up a walkthrough."
   },
   {
@@ -164,9 +164,11 @@ function ContactHero({ locale }: { locale: Locale }) {
   );
 }
 
-function CustomSelect({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
+function CustomSelect({ id, value, onChange, options }: { id: string; value: string; onChange: (v: string) => void; options: string[] }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const listId = `${id}-listbox`;
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
@@ -176,11 +178,31 @@ function CustomSelect({ value, onChange, options }: { value: string; onChange: (
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
 
+  function choose(opt: string) {
+    onChange(opt);
+    setOpen(false);
+    buttonRef.current?.focus();
+  }
+
   return (
-    <div className="relative" ref={ref}>
+    <div
+      className="relative"
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && open) {
+          setOpen(false);
+          buttonRef.current?.focus();
+        }
+      }}
+      ref={ref}
+    >
       <button
+        aria-controls={listId}
+        aria-expanded={open}
+        aria-haspopup="listbox"
         className="flex w-full items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.05] px-4 py-3 text-start text-sm text-white transition focus:border-brand-green focus:outline-none"
+        id={id}
         onClick={() => setOpen((v) => !v)}
+        ref={buttonRef}
         type="button"
       >
         <span>{value}</span>
@@ -194,18 +216,30 @@ function CustomSelect({ value, onChange, options }: { value: string; onChange: (
         </svg>
       </button>
       {open && (
-        <ul className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden rounded-xl border border-white/10 bg-[#0d2820] shadow-xl">
+        <ul
+          aria-labelledby={id}
+          className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden rounded-xl border border-white/10 bg-[#0d2820] shadow-xl"
+          id={listId}
+          role="listbox"
+        >
           {options.map((opt) => (
-            <li key={opt}>
-              <button
-                className={`w-full px-4 py-3 text-start text-sm transition hover:bg-white/[0.06] ${
-                  value === opt ? "font-bold text-brand-green" : "text-white"
-                }`}
-                onClick={() => { onChange(opt); setOpen(false); }}
-                type="button"
-              >
-                {opt}
-              </button>
+            <li
+              aria-selected={value === opt}
+              className={`w-full cursor-pointer px-4 py-3 text-start text-sm transition hover:bg-white/[0.06] focus:bg-white/[0.06] focus:outline-none ${
+                value === opt ? "font-bold text-brand-green" : "text-white"
+              }`}
+              key={opt}
+              onClick={() => choose(opt)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  choose(opt);
+                }
+              }}
+              role="option"
+              tabIndex={0}
+            >
+              {opt}
             </li>
           ))}
         </ul>
@@ -228,6 +262,7 @@ function ContactFormSection({ locale }: { locale: Locale }) {
     topic: topicOptionsEn[0],
     timeline: timelineOptionsEn[5],
     message: "",
+    website: "", // honeypot: real visitors never see or fill this
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -283,7 +318,7 @@ function ContactFormSection({ locale }: { locale: Locale }) {
                 <p className="mt-2 max-w-[320px] text-sm leading-6 text-muted-dark">{content.successBody}</p>
                 <button
                   className="mt-6 text-sm font-bold text-brand-green transition hover:text-brand-green-bright"
-                  onClick={() => { setStatus("idle"); setFields({ name: "", email: "", company: "", country: "", topic: topicOptions[0], timeline: timelineOptions[5], message: "" }); }}
+                  onClick={() => { setStatus("idle"); setFields({ name: "", email: "", company: "", country: "", topic: topicOptions[0], timeline: timelineOptions[5], message: "", website: "" }); }}
                   type="button"
                 >
                   {content.sendAnother}
@@ -293,36 +328,38 @@ function ContactFormSection({ locale }: { locale: Locale }) {
               <form className="space-y-5" onSubmit={handleSubmit}>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <label className={labelClass}>{content.name}</label>
-                    <input className={inputClass} onChange={set("name")} placeholder={content.namePlaceholder} required type="text" value={fields.name} />
+                    <label className={labelClass} htmlFor="contact-name">{content.name}</label>
+                    <input autoComplete="name" className={inputClass} id="contact-name" maxLength={200} onChange={set("name")} placeholder={content.namePlaceholder} required type="text" value={fields.name} />
                   </div>
                   <div>
-                    <label className={labelClass}>{content.workEmail}</label>
-                    <input className={inputClass} onChange={set("email")} placeholder={content.emailPlaceholder} required type="email" value={fields.email} />
-                  </div>
-                </div>
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div>
-                    <label className={labelClass}>{content.company}</label>
-                    <input className={inputClass} onChange={set("company")} placeholder={content.companyPlaceholder} type="text" value={fields.company} />
-                  </div>
-                  <div>
-                    <label className={labelClass}>{content.country}</label>
-                    <input className={inputClass} onChange={set("country")} placeholder={content.countryPlaceholder} type="text" value={fields.country} />
+                    <label className={labelClass} htmlFor="contact-email">{content.workEmail}</label>
+                    <input autoComplete="email" className={inputClass} id="contact-email" maxLength={254} onChange={set("email")} placeholder={content.emailPlaceholder} required type="email" value={fields.email} />
                   </div>
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <label className={labelClass}>{content.topic}</label>
+                    <label className={labelClass} htmlFor="contact-company">{content.company}</label>
+                    <input autoComplete="organization" className={inputClass} id="contact-company" maxLength={200} onChange={set("company")} placeholder={content.companyPlaceholder} type="text" value={fields.company} />
+                  </div>
+                  <div>
+                    <label className={labelClass} htmlFor="contact-country">{content.country}</label>
+                    <input autoComplete="country-name" className={inputClass} id="contact-country" maxLength={200} onChange={set("country")} placeholder={content.countryPlaceholder} type="text" value={fields.country} />
+                  </div>
+                </div>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass} htmlFor="contact-topic">{content.topic}</label>
                     <CustomSelect
+                      id="contact-topic"
                       onChange={(v) => setFields((f) => ({ ...f, topic: v }))}
                       options={topicOptions}
                       value={fields.topic}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>{content.timeline}</label>
+                    <label className={labelClass} htmlFor="contact-timeline">{content.timeline}</label>
                     <CustomSelect
+                      id="contact-timeline"
                       onChange={(v) => setFields((f) => ({ ...f, timeline: v }))}
                       options={timelineOptions}
                       value={fields.timeline}
@@ -330,9 +367,11 @@ function ContactFormSection({ locale }: { locale: Locale }) {
                   </div>
                 </div>
                 <div>
-                  <label className={labelClass}>{content.problem}</label>
+                  <label className={labelClass} htmlFor="contact-message">{content.problem}</label>
                   <textarea
                     className={`${inputClass} resize-none`}
+                    id="contact-message"
+                    maxLength={5000}
                     onChange={set("message")}
                     placeholder={content.problemPlaceholder}
                     required
@@ -340,8 +379,13 @@ function ContactFormSection({ locale }: { locale: Locale }) {
                     value={fields.message}
                   />
                 </div>
+                {/* Honeypot: hidden from people and assistive tech; bots tend to fill it. */}
+                <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+                  <label htmlFor="contact-website">Website</label>
+                  <input autoComplete="off" id="contact-website" name="website" onChange={set("website")} tabIndex={-1} type="text" value={fields.website} />
+                </div>
                 {status === "error" && (
-                  <p className="text-[13px] text-red-400">{errorMsg}</p>
+                  <p className="text-[13px] text-red-400" role="alert">{errorMsg}</p>
                 )}
                 <div>
                   <button
@@ -376,6 +420,7 @@ function ContactFormSection({ locale }: { locale: Locale }) {
                         className={`text-end text-sm font-semibold transition ${
                           green ? "text-[#25d99d] hover:text-[#5be45e]" : "text-white"
                         }`}
+                        dir="ltr"
                         href={href}
                       >
                         {value}
@@ -428,17 +473,27 @@ function FaqSection({ locale }: { locale: Locale }) {
             <AnimateIn delay={i * 80} key={faq.q} variant="up">
             <div>
               <button
+                aria-controls={`faq-panel-${i}`}
+                aria-expanded={openIndex === i}
                 className="flex w-full items-center justify-between gap-8 py-5"
+                id={`faq-trigger-${i}`}
                 onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
                 type="button"
               >
                 <span className="text-[15px] font-black text-[#031915]">{faq.q}</span>
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border-light text-sm text-[#031915]">
+                <span aria-hidden="true" className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border-light text-sm text-[#031915]">
                   {openIndex === i ? "×" : "+"}
                 </span>
               </button>
               {openIndex === i && (
-                <p className={`pb-5 text-sm leading-6 text-muted-light ${isAr ? "pl-14" : "pr-14"}`}>{faq.a}</p>
+                <p
+                  aria-labelledby={`faq-trigger-${i}`}
+                  className={`pb-5 text-sm leading-6 text-muted-light ${isAr ? "pl-14" : "pr-14"}`}
+                  id={`faq-panel-${i}`}
+                  role="region"
+                >
+                  {faq.a}
+                </p>
               )}
             </div>
             </AnimateIn>
