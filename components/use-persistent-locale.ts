@@ -37,6 +37,13 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("storage", syncLocale);
   }, []);
 
+  // Keep <html lang/dir> in step with the chosen language so screen readers, browsers and
+  // translation tools see the real document language, not just the inner page wrapper.
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
+  }, [locale]);
+
   const setLocale = useCallback((nextLocale: Locale) => {
     setLocaleState(nextLocale);
     try {

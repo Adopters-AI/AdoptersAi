@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { LanguageToggle, type Locale } from "@/components/language-toggle";
 import { Button, Container, Logo } from "@/components/ui";
@@ -29,13 +29,14 @@ const shellContent = {
       ["الخدمات", "/services"],
       ["المنتجات", "/products"],
       ["حالات الاستخدام", "/use-cases"],
-      ["أكاديمية الذكاء الاصطناعي", "/ai-academy"]
+      ["أكاديمية الذكاء الاصطناعي", "/ai-academy"],
+      ["PRDI", "/prdi"]
     ],
     bookCall: "احجز موعد اتصال",
     footerBody: "نُمكّن المؤسسات من تبني وتفعيل حلول الذكاء الاصطناعي.",
     columns: [
       ["شركة", "الرئيسية", "الخدمات", "المنتجات", "حالات الاستخدام"],
-      ["استكشف", "أكاديمية الذكاء الاصطناعي", "تقييم الذكاء الاصطناعي", "اتصل"],
+      ["استكشف", "أكاديمية الذكاء الاصطناعي", "PRDI", "تقييم الذكاء الاصطناعي", "اتصل"],
       ["الخطوة التالية", "انضم إلى قائمة انتظار الأكاديمية", "ابدأ التقييم", "احجز موعد اتصال"]
     ],
     copyright: "© 2026 Adopters®. جميع الحقوق محفوظة.",
@@ -104,6 +105,21 @@ export function SiteHeader({
   const isAr = effectiveLocale === "ar";
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // While the mobile menu is open: stop the page scrolling behind it, and let Escape close it.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/[0.14] bg-brand-darker text-white">
       <Container className="flex h-[77px] items-center justify-between">
@@ -139,6 +155,7 @@ export function SiteHeader({
         <div className="flex items-center gap-2 md:hidden">
           {allowArabic ? <LanguageToggle locale={locale} onChange={setLocale} /> : null}
           <button
+            aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 text-white transition hover:bg-white/[0.06]"
             onClick={() => setMenuOpen((v) => !v)}

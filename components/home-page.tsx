@@ -122,7 +122,7 @@ const copy = {
     cta: {
       title: "Not sure where to start?",
       body:
-        "Answer four questions and get a recommended AI path: Strategy, Build, Operate, Adopters Intelligent, or Pulse.",
+        "Answer four questions and get a recommended AI path: Strategy, Build, Operate, or Adopters Intelligent.",
       primary: "Take assessment",
       secondary: "Book a call"
     }
@@ -236,7 +236,7 @@ const copy = {
     cta: {
       title: "لست متأكداً من أين تبدأ؟",
       body:
-        "أجب عن أربعة أسئلة سريعة لترشيح مسار الذكاء الاصطناعي الأنسب لوضعك الحالي: الإستراتيجية، البناء، التشغيل، Adopters Intelligent، أو Pulse.",
+        "أجب عن أربعة أسئلة سريعة لترشيح مسار الذكاء الاصطناعي الأنسب لوضعك الحالي: الإستراتيجية، البناء، التشغيل، أو Adopters Intelligent.",
       primary: "ابدأ التقييم الآن",
       secondary: "احجز موعد اتصال"
     }
