@@ -56,7 +56,7 @@ const almarai = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Adopters AI",
+  title: { default: "Adopters AI", template: "%s | Adopters AI" },
   description: "Enterprise AI systems, platforms, and operations.",
   icons: {
     icon: adoptersMark.src,
